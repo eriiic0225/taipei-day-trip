@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager #非同步/lifespan
 from fastapi import *
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles # 靜態網頁資料處理 / 各種檔案
 from starlette.middleware.sessions import SessionMiddleware # 使用者狀態管理（week 1尚未使用）
 from typing import Optional
@@ -113,29 +113,29 @@ async def search_attractions(
 		cursor1.execute(sql, tuple(params))
 		result = cursor1.fetchall()
 
-		check_next_page = f"""SELECT * FROM attractions
-		WHERE {where_clause}
-		LIMIT 8 OFFSET {(page+1)* page_size}"""
-
-		cursor1.execute(check_next_page, tuple(params))
-		next_page_checked = cursor1.fetchall()
-		has_next_page = True if next_page_checked else False
-		nextPage = (page + 1) if has_next_page else None
-
-		for idx, info in enumerate(result):
-			id = info.get("id")
+		# 抓圖片URL並與景點主資訊整合
+		for info in result:
+			attraction_id = info.get("id")
 			cursor2.execute(
 				"""SELECT attractions_images.image_url FROM attractions_images 
-				WHERE attraction_id=%s""", [id])
+				WHERE attraction_id=%s""", [attraction_id])
 			nest_urls = cursor2.fetchall()
-			flat_urls = [item for sub_list in nest_urls for item in sub_list]
-			result[idx]["image"] = flat_urls
+			image_urls  = [url[0] for url in nest_urls]
+			info["image"] = image_urls
+
+		# 確認是否有下一頁
+		check_next_page = f"""SELECT * FROM attractions
+		WHERE {where_clause}
+		LIMIT 1 OFFSET {(page+1)* page_size}"""
+
+		cursor1.execute(check_next_page, tuple(params))
+		has_next_page = len(cursor1.fetchall()) > 0
+		nextPage = (page + 1) if has_next_page else None
 
 		context = {
 			"nextPage": nextPage,
 			"data": result,	
 		}
-
 
 		return context
 
@@ -145,7 +145,13 @@ async def search_attractions(
 
 	except Exception as e:
 		print(f"❌ 執行失敗: {str(e)}")
-        # ...
+		return JSONResponse(
+			status_code=500,
+			content={
+				"error": True,
+				"message": str(e)
+			}
+		)
     
 	finally:
 		cursor1.close()
