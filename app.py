@@ -29,7 +29,7 @@ async def lifespan(app: FastAPI):
             pool_size=10,                      # 初始連接池大小（預先建立 10 個連接）
             pool_reset_session=True,           # 每次取得連接時重置會話（清除上一個操作的狀態）
             host="localhost",                  # MySQL 服務器地址
-            user="root",                       # 資料庫使用者名稱
+            user="wehelpS2",                       # 資料庫使用者名稱
             password=db_pwd,                   # 資料庫密碼
             database="taipei_attractions"      # 預設資料庫名稱
         )
