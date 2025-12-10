@@ -157,7 +157,7 @@ async def search_attractions(
 		cursor1.close()
 		cursor2.close()
 
-@app.get("/api/attractions/{attractionsId}")
+@app.get("/api/attraction/{attractionsId}")
 async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
 	cursor1 = cnx.cursor(dictionary=True) #抓資訊
 	cursor2 = cnx.cursor() #抓url
