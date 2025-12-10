@@ -77,7 +77,7 @@ async def booking(request: Request):
 async def thankyou(request: Request):
 	return FileResponse("./static/thankyou.html", media_type="text/html")
 
-# week 1 - API
+# ------------ week 1 - API ------------
 @app.get("/api/attractions")
 async def search_attractions(
 	page:int = Query(0,ge=0),
@@ -87,7 +87,7 @@ async def search_attractions(
 ):
 	page_size = 8
 	cursor1 = cnx.cursor(dictionary=True) #抓資訊
-	cursor2 = cnx.cursor() #抓image_url，需要以陣列形式回傳response
+	cursor2 = cnx.cursor() #抓image_url，以陣列形式回傳response
     
 	try:
 		offset = page * page_size
@@ -121,7 +121,7 @@ async def search_attractions(
 				WHERE attraction_id=%s""", [attraction_id])
 			nest_urls = cursor2.fetchall()
 			image_urls  = [url[0] for url in nest_urls]
-			info["image"] = image_urls
+			info["images"] = image_urls
 
 		# 確認是否有下一頁
 		check_next_page = f"""SELECT * FROM attractions
@@ -149,10 +149,99 @@ async def search_attractions(
 			status_code=500,
 			content={
 				"error": True,
-				"message": str(e)
+				"message": f"伺服器內部錯誤:{str(e)}"
 			}
 		)
     
 	finally:
 		cursor1.close()
 		cursor2.close()
+
+@app.get("/api/attractions/{attractionsId}")
+async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
+	cursor1 = cnx.cursor(dictionary=True) #抓資訊
+	cursor2 = cnx.cursor() #抓url
+	try:
+		cursor1.execute(
+			"""SELECT * FROM attractions WHERE id=%s""", [attractionsId]
+		)
+		attraction = cursor1.fetchone()
+		if not attraction:
+			return JSONResponse(
+				status_code=400,
+				content={
+					"error": True,
+					"message": "景點編號查無資料"
+				}
+			)
+		
+		cursor2.execute(
+			"""SELECT attractions_images.image_url FROM attractions_images 
+			WHERE attraction_id=%s""", [attractionsId])
+		image_urls = [url[0] for url in cursor2.fetchall()]
+		attraction["images"] = image_urls
+
+		return {"data": attraction}
+
+	except Exception as e:
+		print(f"❌ 執行失敗: {str(e)}")
+		return JSONResponse(
+			status_code=500,
+			content={
+				"error": True,
+				"message": f"伺服器內部錯誤:{str(e)}"
+			}
+		)
+    
+	finally:
+		cursor1.close()
+		cursor2.close()
+
+@app.get("/api/categories")
+async def list_categories(cnx=Depends(get_db)):
+	cursor = cnx.cursor()
+	try :
+		cursor.execute("SELECT category FROM attractions GROUP BY category ORDER BY category DESC")
+		result = cursor.fetchall()
+		categories = [category[0] for category in result]
+		return {"data": categories}
+
+	except Exception as e:
+		print(f"❌ 執行失敗: {str(e)}")
+		return JSONResponse(
+			status_code=500,
+			content={
+				"error": True,
+				"message": f"伺服器內部錯誤:{str(e)}"
+			}
+		)
+
+	finally:
+		cursor.close()
+
+@app.get("/api/mrts")
+async def list_mrts(cnx=Depends(get_db)):
+	cursor = cnx.cursor()
+	try :
+		cursor.execute(
+			"""SELECT mrt, COUNT(*)AS num 
+			FROM attractions 
+			WHERE mrt IS NOT NULL AND mrt !=''
+			GROUP BY mrt ORDER BY num DESC;""")
+			# SQL中判斷 NULL 需要要用 IS NULL 或 IS NOT NULL
+		result = cursor.fetchall()
+		mrts = [mrt[0] for mrt in result]
+		return {"data": mrts}
+
+	except Exception as e:
+		print(f"❌ 執行失敗: {str(e)}")
+		return JSONResponse(
+			status_code=500,
+			content={
+				"error": True,
+				"message": f"伺服器內部錯誤:{str(e)}"
+			}
+		)
+
+	finally:
+		cursor.close()
