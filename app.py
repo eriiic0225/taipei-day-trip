@@ -86,8 +86,7 @@ async def search_attractions(
 	cnx=Depends(get_db)
 ):
 	page_size = 8
-	cursor1 = cnx.cursor(dictionary=True) #抓資訊
-	cursor2 = cnx.cursor() #抓image_url，以陣列形式回傳response
+	cursor = cnx.cursor(dictionary=True)
     
 	try:
 		offset = page * page_size
@@ -97,39 +96,50 @@ async def search_attractions(
 		params = []
         
 		if category:
-			conditions.append("category=%s")
+			conditions.append("a.category=%s")
 			params.append(category)
 
 		if keyword:
-			conditions.append("(mrt=%s OR name REGEXP %s)")
+			conditions.append("(a.mrt=%s OR a.name REGEXP %s)")
 			params.extend([keyword, keyword])
 
+		# 動態構造出條件
 		where_clause = " AND ".join(conditions) if conditions else "1=1"
 
-		sql = f"""SELECT * FROM attractions
+		sql = f"""
+		SELECT 
+			a.id,
+			a.name,
+			a.category,
+			a.description,
+			a.address,
+			a.transport,
+			a.mrt,
+			a.lat,
+			a.lng,
+			GROUP_CONCAT(ai.image_url) AS images
+		FROM attractions a 
+		LEFT JOIN attractions_images ai
+		ON a.id = ai.attraction_id
 		WHERE {where_clause}
+		GROUP BY a.id
 		LIMIT 8 OFFSET {offset}"""
 
-		cursor1.execute(sql, tuple(params))
-		result = cursor1.fetchall()
+		cursor.execute(sql, tuple(params))
+		result = cursor.fetchall()
 
-		# 抓圖片URL並與景點主資訊整合
-		for info in result:
-			attraction_id = info.get("id")
-			cursor2.execute(
-				"""SELECT attractions_images.image_url FROM attractions_images 
-				WHERE attraction_id=%s""", [attraction_id])
-			nest_urls = cursor2.fetchall()
-			image_urls  = [url[0] for url in nest_urls]
-			info["images"] = image_urls
+		for row in result:
+			image_str = row.get("images",'')
+			row['images'] = image_str.split(',') if image_str else []
+
 
 		# 確認是否有下一頁
-		check_next_page = f"""SELECT * FROM attractions
+		check_next_page = f"""SELECT * FROM attractions a
 		WHERE {where_clause}
 		LIMIT 1 OFFSET {(page+1)* page_size}"""
 
-		cursor1.execute(check_next_page, tuple(params))
-		has_next_page = len(cursor1.fetchall()) > 0
+		cursor.execute(check_next_page, tuple(params))
+		has_next_page = len(cursor.fetchall()) > 0
 		nextPage = (page + 1) if has_next_page else None
 
 		context = {
@@ -139,33 +149,42 @@ async def search_attractions(
 
 		return context
 
-		# ("""SELECT * FROM attractions
-		# WHERE category=%s AND (mrt=%s OR name REGEXP %s)
-		# LIMIT 8 OFFSET %s""",(參數們))
-
 	except Exception as e:
 		print(f"❌ 執行失敗: {str(e)}")
 		return JSONResponse(
 			status_code=500,
 			content={
 				"error": True,
-				"message": f"伺服器內部錯誤:{str(e)}"
+				"message": f" /api/attractions 伺服器內部錯誤:{str(e)}"
 			}
 		)
     
 	finally:
-		cursor1.close()
-		cursor2.close()
+		cursor.close()
 
 @app.get("/api/attraction/{attractionsId}")
 async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
-	cursor1 = cnx.cursor(dictionary=True) #抓資訊
-	cursor2 = cnx.cursor() #抓url
+	cursor = cnx.cursor(dictionary=True) #抓資訊
 	try:
-		cursor1.execute(
-			"""SELECT * FROM attractions WHERE id=%s""", [attractionsId]
-		)
-		attraction = cursor1.fetchone()
+		cursor.execute(
+			"""SELECT 
+				a.id, 
+				a.name, 
+				a.description, 
+				a.address, 
+				a.transport, 
+				a.mrt, 
+				a.lat, 
+				a.lng,
+				JSON_ARRAYAGG(ai.image_url) AS images 
+			FROM attractions a 
+			LEFT JOIN attractions_images ai
+			ON a.id = ai.attraction_id
+			WHERE a.id=%s
+			GROUP BY a.id"""
+			,(attractionsId,)) # 單元素tuple結尾括號前要記得加逗號，不然python無法判斷這是tuple還是普通字串
+		attraction = cursor.fetchone()
+
 		if not attraction:
 			return JSONResponse(
 				status_code=400,
@@ -175,11 +194,8 @@ async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
 				}
 			)
 		
-		cursor2.execute(
-			"""SELECT attractions_images.image_url FROM attractions_images 
-			WHERE attraction_id=%s""", [attractionsId])
-		image_urls = [url[0] for url in cursor2.fetchall()]
-		attraction["images"] = image_urls
+		if isinstance(attraction['images'], str): # 如果是字串
+			attraction['images'] = json.loads(attraction['images']) # 轉成陣列
 
 		return {"data": attraction}
 
@@ -194,16 +210,20 @@ async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
 		)
     
 	finally:
-		cursor1.close()
-		cursor2.close()
+		cursor.close()
 
 @app.get("/api/categories")
 async def list_categories(cnx=Depends(get_db)):
 	cursor = cnx.cursor()
 	try :
-		cursor.execute("SELECT category FROM attractions GROUP BY category ORDER BY category DESC")
+		cursor.execute(
+			"""SELECT DISTINCT category 
+			FROM attractions 
+			ORDER BY category DESC""")
 		result = cursor.fetchall()
+		print(result)
 		categories = [category[0] for category in result]
+
 		return {"data": categories}
 
 	except Exception as e:
@@ -245,3 +265,7 @@ async def list_mrts(cnx=Depends(get_db)):
 
 	finally:
 		cursor.close()
+
+# ------------------- 統一處理靜態網頁 --------------------
+# 物件名稱.mount("網頁前綴", StaticFiles(directory="資料夾名稱"),name="內部名稱")
+app.mount("/static", StaticFiles(directory="static"), name="static")
