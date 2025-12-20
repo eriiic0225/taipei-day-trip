@@ -254,6 +254,7 @@ body {
     display: grid;
     grid-auto-rows: 242px;
     gap: 30px;
+    flex: 1;
 }
 
 @media (min-width:1200px){
