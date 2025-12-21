@@ -233,6 +233,7 @@ async function loadMore() {
 async function newSearch(){
     // 1. 清空舊卡片
     attractionsContainer.innerHTML = ''
+
     const noResult = document.querySelector('.attraction__no-result')
 
     // 2. 重置 nextPage
