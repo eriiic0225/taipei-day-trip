@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Index</title>
+  <title>台北一日遊</title>
   <link rel="stylesheet" href="/static/css/reset.css">
   <link rel="stylesheet" href="/static/css/style.css">
   <script src="/static/JS/script.js" defer></script>
@@ -34,7 +34,7 @@
 
       <form class="search-box" role="search">
         <div class="search-box__inner">
-          <!-- 分類下拉菜單 -->
+          
           <div class="category-dropdown__trigger"><span id="category-dropdown__filter">全部分類</span>▼</div>
           <!-- 搜尋輸入框 -->
           <input type="search" class="search-box__input" placeholder="輸入景點名稱查詢">
@@ -42,6 +42,7 @@
             <img src="/static/img/icon_search.png" height="30px" width="30px" alt=""/>
           </button>
         </div>
+        <!-- 分類下拉菜單 -->
         <div class="category-dropdown__container category-dropdown__container--close">
           <ul class="category-dropdown__menu">
             <li class="category-dropdown__item" data-category="">全部分類</li>
@@ -50,20 +51,20 @@
       </form>
     </div>
   </header>
-  <!-- ===== Listbar SECTION ===== -->
+  <!-- ===== 捷運站 Listbar 區域 ===== -->
   <section class="container list-bar">
-    <button id="carousel__backBtn" class="carousel__btn" type="button" aria-label="上一張"></button>
+    <button id="carousel__backBtn" class="carousel__btn" type="button" aria-label="往前"></button>
     <ul class="carousel">
       <!-- mrt結構參考 
       <li class="carousel__mrt">劍潭</li> 
       -->
     </ul>
-    <button id="carousel__nextBtn" class="carousel__btn" type="button" aria-label="下一張"></button>
+    <button id="carousel__nextBtn" class="carousel__btn" type="button" aria-label="往後"></button>
   </section>
-  <div class="container">
+  <!-- ======== 景點 card 區域 ======== -->
+  <div class="container attractions__wrap">
     <section class="attractions">
-      <!-- ======== card 結構參照 ======== -->
-        <!-- 
+        <!-- card 結構參照
         <div class="attraction_card">
           <div class="attraction_card__content">
             <img class="attraction_card__pic" src="#" alt="景點照片">

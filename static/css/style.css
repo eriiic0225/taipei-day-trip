@@ -7,11 +7,13 @@
     --shadow: 0 0 20px #AABBCC;
     --selected-cat: #EEEEEE;
 }
+html, body{
+    min-height: 100dvh;
+}
 
 body {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
 }
 
 /* ===== navbar區域 ===== */
@@ -24,6 +26,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 10000;
+    border-bottom: 1px solid rgba(232, 232, 232, 1);
 }
 
 .container {
@@ -246,6 +249,9 @@ body {
 
 
 /* ===== attractions 區域 ===== */
+.attractions__wrap {
+    flex-grow: 1;
+}
 
 .attractions {
     width: 100%;
@@ -254,7 +260,6 @@ body {
     display: grid;
     grid-auto-rows: 242px;
     gap: 30px;
-    flex: 1;
 }
 
 @media (min-width:1200px){
@@ -279,7 +284,15 @@ body {
     cursor: pointer;
     border-radius: 5px;
     border: 1px solid rgba(232, 232, 232, 1);
-    overflow: hidden;
+    overflow: hidden; /*沒設這個下邊框會不見(被子元素蓋掉)*/
+    transition: all 0.3s ease;
+}
+
+.attraction_card:hover {
+    filter: 
+        brightness(1.1) 
+        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transform: translateY(-4px);
 }
 
 .attraction_card__content {
@@ -318,7 +331,7 @@ body {
 }
 
 .attraction__no-result {
-    flex: 1;
+    flex-grow: 1;
     display: none;
 }
 

@@ -221,7 +221,6 @@ async def list_categories(cnx=Depends(get_db)):
 			FROM attractions 
 			ORDER BY category DESC""")
 		result = cursor.fetchall()
-		print(result)
 		categories = [category[0] for category in result]
 
 		return {"data": categories}
