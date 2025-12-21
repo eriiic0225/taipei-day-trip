@@ -1,11 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Index</title>
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/JS/script.js" defer></script>
 </head>
 <body>
-  
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__logo">台北一日遊</div>
+      <ul class="navbar__list">
+        <li class="navbar__items">
+          <a href="#" class="navbar__link">預定行程</a>
+        </li>
+        <li class="navbar__items">
+          <a href="#" class="navbar__link">登入/註冊</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <header class="hero">
+    <div class="hero__content">
+      <div class="hero__slogan">
+        <h1 class="hero__title">輕鬆享受台北一日遊</h1>
+        <p class="hero__subtitle">探索每個角落，體驗城市的深度旅遊行程</p>
+      </div>
+
+      <form class="search-box" role="search">
+        <div class="search-box__inner">
+          <!-- 分類下拉菜單 -->
+          <div class="category-dropdown__trigger"><span id="category-dropdown__filter">全部分類</span>▼</div>
+          <!-- 搜尋輸入框 -->
+          <input type="search" class="search-box__input" placeholder="輸入景點名稱查詢">
+          <button type="submit" class="search-box__btn" aria-label="搜尋">
+            <img src="/static/img/icon_search.png" height="30px" width="30px" alt=""/>
+          </button>
+        </div>
+        <div class="category-dropdown__container category-dropdown__container--close">
+          <ul class="category-dropdown__menu">
+            <li class="category-dropdown__item" data-category="">全部分類</li>
+          </ul>
+        </div>
+      </form>
+    </div>
+  </header>
+  <!-- ===== Listbar SECTION ===== -->
+  <section class="container list-bar">
+    <button id="carousel__backBtn" class="carousel__btn" type="button" aria-label="上一張"></button>
+    <ul class="carousel">
+      <!-- mrt結構參考 
+      <li class="carousel__mrt">劍潭</li> 
+      -->
+    </ul>
+    <button id="carousel__nextBtn" class="carousel__btn" type="button" aria-label="下一張"></button>
+  </section>
+  <div class="container">
+    <section class="attractions">
+      <!-- ======== card 結構參照 ======== -->
+        <!-- 
+        <div class="attraction_card">
+          <div class="attraction_card__content">
+            <img class="attraction_card__pic" src="#" alt="景點照片">
+            <div class="attraction_card__name">平安鐘</div>
+          </div>
+          <div class="attraction_card__detail">
+            <div class="attraction_card__mrt">忠孝復興</div>
+            <div class="attraction_card__cat">公共藝術</div>
+          </div>
+        </div> 
+        -->
+
+    </section>
+  </div>
+  <div class="attraction__no-result">查無搜尋結果</div>
+  <footer class="footer__copy-right">
+    COPYRIGHT © 2025 台北一日遊
+  </footer>
 </body>
 </html>
