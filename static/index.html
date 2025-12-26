@@ -6,13 +6,14 @@
   <title>台北一日遊</title>
   <link rel="stylesheet" href="/static/css/reset.css">
   <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/JS/utils.js" defer></script>
   <script src="/static/JS/script.js" defer></script>
 </head>
 <body>
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar">
     <div class="container">
-      <div class="navbar__logo">台北一日遊</div>
+      <div class="navbar__logo"><a href="/">台北一日遊</a></div>
       <ul class="navbar__list">
         <li class="navbar__items">
           <a href="#" class="navbar__link">預定行程</a>
@@ -53,19 +54,19 @@
   </header>
   <!-- ===== 捷運站 Listbar 區域 ===== -->
   <section class="container list-bar">
-    <button id="carousel__backBtn" class="carousel__btn" type="button" aria-label="往前"></button>
+    <button class="carousel__back-btn" type="button" aria-label="往回"></button>
     <ul class="carousel">
       <!-- mrt結構參考 
       <li class="carousel__mrt">劍潭</li> 
       -->
     </ul>
-    <button id="carousel__nextBtn" class="carousel__btn" type="button" aria-label="往後"></button>
+    <button class="carousel__next-btn" type="button" aria-label="往後"></button>
   </section>
   <!-- ======== 景點 card 區域 ======== -->
   <div class="container attractions__wrap">
     <section class="attractions">
         <!-- card 結構參照
-        <div class="attraction_card">
+        <a class="attraction_card" href="/attraction/1">
           <div class="attraction_card__content">
             <img class="attraction_card__pic" src="#" alt="景點照片">
             <div class="attraction_card__name">平安鐘</div>
@@ -80,6 +81,7 @@
     </section>
   </div>
   <div class="attraction__no-result">查無搜尋結果</div>
+  <!-- ===== FOOTER ===== -->
   <footer class="footer__copy-right">
     COPYRIGHT © 2025 台北一日遊
   </footer>

@@ -3,9 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attraction</title>
+  <title>台北一日遊</title>
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/JS/utils.js" defer></script>
+  <script src="/static/JS/attraction.js" defer></script>
 </head>
 <body>
-  
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__logo"><a href="/">台北一日遊</a></div>
+      <ul class="navbar__list">
+        <li class="navbar__items">
+          <a href="#" class="navbar__link">預定行程</a>
+        </li>
+        <li class="navbar__items">
+          <a href="#" class="navbar__link">登入/註冊</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ===== 圖片與預定表單 ===== -->
+  <section class="attraction-page__top">
+    <div class="attraction-page__top-layout">
+      <div class="attraction-page__carousel" data-carousel>
+        <ul class="attraction-page__slides_gallery" data-slides>
+          <!-- <li class="attraction-page__slide" data-active>
+            <img class="attraction-page__slide__photo" src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000848.jpg" alt="景點照片"/>
+          </li>
+          <li class="attraction-page__slide">
+            <img class="attraction-page__slide__photo" src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11002891.jpg" alt="景點照片" />
+          </li>
+          <li class="attraction-page__slide">
+            <img class="attraction-page__slide__photo" src="https://www.travel.taipei/d_upload_ttn/sceneadmin/image/A0/B0/C0/D315/E70/F65/1e0951fb-069f-4b13-b5ca-2d09df1d3d90.JPG" alt="景點照片" />
+          </li>
+          <li class="attraction-page__slide">
+            <img class="attraction-page__slide__photo" src="https://www.travel.taipei/d_upload_ttn/sceneadmin/image/A0/B0/C0/D260/E538/F274/e7d482ba-e3c0-40c3-87ef-3f2a1c93edfa.JPG" alt="景點照片" />
+          </li>
+          <li class="attraction-page__slide">
+            <img class="attraction-page__slide__photo" src="https://www.travel.taipei/d_upload_ttn/sceneadmin/image/A0/B0/C0/D919/E767/F581/9ddde70e-55c2-4cf0-bd3d-7a8450582e55.jpg" alt="景點照片" />
+          </li>
+          <li class="attraction-page__slide">
+            <img class="attraction-page__slide__photo" src="https://www.travel.taipei/d_upload_ttn/sceneadmin/image/A0/B0/C1/D28/E891/F188/77a58890-7711-4ca2-aebe-4aa379726575.JPG" alt="景點照片" />
+          </li> -->
+        </ul>
+      
+        <button class="attraction-page__carousel-btn__prev" type="button" aria-label="上一張" data-carousel-button="prev"></button>
+        <button class="attraction-page__carousel-btn__next" type="button" aria-label="下一張" data-carousel-button="next"></button>
+        
+        <div class="attraction-page__carousel__indicators" role="tablist">
+          <!-- <button role="tab" aria-label="第1張" aria-selected="true" data-slide="0"></button>
+          <button role="tab" aria-label="第2張" aria-selected="false" data-slide="1"></button>
+          <button role="tab" aria-label="第3張" aria-selected="false" data-slide="2"></button>
+          <button role="tab" aria-label="第4張" aria-selected="false" data-slide="3"></button>
+          <button role="tab" aria-label="第5張" aria-selected="false" data-slide="4"></button>
+          <button role="tab" aria-label="第6張" aria-selected="false" data-slide="5"></button> -->
+        </div>
+      </div>
+
+      <div class="attraction-page__profile">
+        <h3 class="attraction-page__name">載入中...</h3>
+        <div class="attraction-page__info">
+          <span class="attraction-page__category">載入中...</span>
+          at <span class="attraction-page__mrt">暫無相關資訊</span>
+        </div>
+
+        <form class="attraction-page__booking-form">
+          <h4>訂購導覽行程</h4>
+          <p>以此景點為中心的一日行程，帶您探索城市角落故事</p>
+          <div class="attraction-page__booking-date">
+            <label class="attraction-page__selete" for="select-date">選擇日期：</label>
+            <input id="select-date" type="date" name="book-date" aria-label="選擇日期">
+          </div>
+          <div class="attraction-page__booking-time">
+            <span class="attraction-page__selete">選擇時間：</span>
+            <label>
+              <input type="radio" name="book-time" data-price="2000" checked>上半天
+            </label>
+            <label >
+              <input type="radio" name="book-time" data-price="2500">下半天
+            </label>
+            
+          </div>
+          <div class="attraction-page__booking-fee attraction-page__selete">
+            導覽費用： <span class="attraction-page__booking-fee__total">新台幣 2000 元</span>
+          </div>
+          <button class="attraction-page__book-btn" type="button">開始預定行程</button>
+        </form>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="sepatator"></div>
+
+  <section class="attraction-page__bot">
+    <div class="attraction-page__bot-layout">
+      <div class="attraction-page__description">
+        <p>
+          景點資訊載入中...
+        </p>
+      </div>
+      <div class="attraction-page__detail">
+        <h4>景點地址：</h4>
+        <p class="attraction-page__detail__address">
+          景點資訊載入中...
+        </p>
+      </div>
+      <div class="attraction-page__detail">
+        <h4>交通方式：</h4>
+        <p class="attraction-page__detail__transport">
+          景點資訊載入中...
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer__copy-right">
+    COPYRIGHT © 2025 台北一日遊
+  </footer>
 </body>
 </html>

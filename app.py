@@ -169,7 +169,8 @@ async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
 		cursor.execute(
 			"""SELECT 
 				a.id, 
-				a.name, 
+				a.name,
+				a.category,
 				a.description, 
 				a.address, 
 				a.transport, 

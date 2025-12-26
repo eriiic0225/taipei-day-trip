@@ -17,8 +17,8 @@ const mrtList = document.querySelector('.carousel') // mrt容器
 
 // ============ List bar 滾動 ============ 
 const scrollContainer = document.querySelector(".carousel")
-const backBtn = document.querySelector("#carousel__backBtn")
-const nextBtn = document.querySelector("#carousel__nextBtn")
+const backBtn = document.querySelector(".carousel__back-btn")
+const nextBtn = document.querySelector(".carousel__next-btn")
 const listBar = document.querySelector(".list-bar") 
 
 listBar.addEventListener("wheel", (e)=>{
@@ -56,32 +56,6 @@ categoryMenu.addEventListener("click", (e)=>{
     }
 })
 
-// ============ API請求 - 資料抓取 ============ 
-async function fetchData(url) {
-    try{
-        const response = await fetch(url, {
-            method: "GET"
-        })
-
-        // 檢查 HTTP 狀態碼
-        if (!response.ok){
-            throw new Error(`伺服器錯誤: ${response.status}`)
-        }
-
-        // ============ 解析 JSON ============
-        const result = await response.json()
-        if (!result.data || !Array.isArray(result.data)){
-            throw new Error("API 返回了無效的格式");
-        }
-        
-        return result
-    } catch (error) {
-        console.error("API載入失敗", error)
-        return null;  // 失敗時回傳 null
-    }
-}
-
-
 
 // ============ 輸入框搜尋 ============ 
 const searchBtn = document.querySelector('.search-box__btn')
@@ -111,31 +85,32 @@ function renderCards(attractions){
     attractions.forEach( item => {
 
         // 創造容器＆子元素
-        const attraction_card = document.createElement('div')
-        attraction_card.className = 'attraction_card'
+        const attraction_card = document.createElement('a')
+        attraction_card.className = 'attraction__card'
         attraction_card.dataset.attractionId = item.id
+        attraction_card.href = `/attraction/${item.id}`
 
         const attraction_card__content = document.createElement('div')
-        attraction_card__content.className = 'attraction_card__content'
+        attraction_card__content.className = 'attraction__card__content'
 
         const attraction_card__pic = document.createElement('img')
-        attraction_card__pic.className = 'attraction_card__pic'
+        attraction_card__pic.className = 'attraction__card__pic'
         attraction_card__pic.src = item.images[0]
         attraction_card__pic.alt = item.name
 
         const attraction_card__name = document.createElement('div')
-        attraction_card__name.className = 'attraction_card__name'
+        attraction_card__name.className = 'attraction__card__name'
         attraction_card__name.textContent = item.name
 
         const attraction_card__detail = document.createElement('div')
-        attraction_card__detail.className = 'attraction_card__detail'
+        attraction_card__detail.className = 'attraction__card__detail'
 
         const attraction_card__mrt = document.createElement('div')
-        attraction_card__mrt.className = 'attraction_card__mrt'
+        attraction_card__mrt.className = 'attraction__card__mrt'
         attraction_card__mrt.textContent = item.mrt
 
         const attraction_card__cat = document.createElement('div')
-        attraction_card__cat.className = 'attraction_card__cat'
+        attraction_card__cat.className = 'attraction__card__cat'
         attraction_card__cat.textContent = item.category
 
         // 組合元素
@@ -160,7 +135,7 @@ function renderCategories(categories){
         if (index > 0) item.remove();  // 保留第一個"全部分類"
     });
 
-    categories.data.forEach(category =>{
+    categories.forEach(category =>{
         const categoryItem = document.createElement('li')
         
         categoryItem.className = 'category-dropdown__item'
@@ -174,7 +149,7 @@ function renderCategories(categories){
 // ============ Mrt List渲染函式 ============
 function renderMrts(mrts){
     const container = document.querySelector('.carousel')
-    mrts.data.forEach(mrt => {
+    mrts.forEach(mrt => {
         const mrtItem = document.createElement('li')
         mrtItem.className = 'carousel__mrt'
         mrtItem.textContent = mrt
@@ -184,22 +159,20 @@ function renderMrts(mrts){
 
 // ============ 初始化(首次渲染) ============
 async function init() {
-    const attractionsResult = await fetchData('/api/attractions');
+    // 改為並行發送三個請求
+    const [attractionsResult, catResult, mrtResult] = await Promise.all([
+        fetchData('/api/attractions'),
+        fetchData('/api/categories'),
+        fetchData('/api/mrts')
+    ])
+
     if (attractionsResult) {
         renderCards(attractionsResult.data);      // 渲染第一頁
         nextPage = attractionsResult.nextPage;    // 保存下一頁遊標
-        // console.log("下一頁:", nextPage);
     }
 
-    const catResult = await fetchData('api/categories')
-    if (catResult) {
-        renderCategories(catResult)
-    }
-
-    const mrtResult = await fetchData('/api/mrts')
-    if (mrtResult) {
-        renderMrts(mrtResult)
-    }
+    if (catResult) renderCategories(catResult.data);
+    if (mrtResult) renderMrts(mrtResult.data);
 
 }
 init() // 記得立馬執行初始化
