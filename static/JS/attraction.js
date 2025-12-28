@@ -22,6 +22,7 @@ function renderAttractionDetail(attractionDetail){
     attractionDetail.images.forEach((url, idx)=>{
         const slide = document.createElement('li')
         slide.className = 'attraction-page__slide'
+        if (idx === 0) slide.dataset.active = true
 
         const slidePhoto = document.createElement('img')
         slidePhoto.className = 'attraction-page__slide__photo'
@@ -34,7 +35,7 @@ function renderAttractionDetail(attractionDetail){
         const indicator = document.createElement('button')
         indicator.role = "tab"
         indicator.ariaLabel = `第${idx+1}張`
-        indicator.ariaSelected = false
+        if (idx === 0) indicator.ariaSelected = true
         indicator.dataset.slide = idx
         indicatorBar.appendChild(indicator)
     })
@@ -58,6 +59,7 @@ function renderAttractionDetail(attractionDetail){
     const attractionTrasport = document.querySelector('.attraction-page__detail__transport')
     attractionTrasport.textContent = attractionDetail.transport
 }
+
 
 //費用切換計算
 const timeInputs = document.querySelectorAll('input[name="book-time"]')
@@ -126,12 +128,6 @@ async function attractionPageInit(){
     const rawData = await fetchData(`/api/attraction/${getAttractionIdFromURL()}`)
 
     if (rawData) renderAttractionDetail(rawData.data)
-
-    const firstPic = document.querySelector('.attraction-page__slide:first-child')
-    firstPic.dataset.active = true
-
-    const firstIndicator = document.querySelector('.attraction-page__carousel__indicators button:first-child')
-    firstIndicator.ariaSelected = true
 
     initSlideShow()
 
