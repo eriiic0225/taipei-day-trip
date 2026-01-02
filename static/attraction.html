@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/static/css/reset.css">
   <link rel="stylesheet" href="/static/css/style.css">
   <script src="/static/JS/utils.js" defer></script>
+  <script src="/static/JS/user.js" defer></script>
   <script src="/static/JS/attraction.js" defer></script>
 </head>
 <body>
@@ -19,11 +20,58 @@
           <a href="#" class="navbar__link">預定行程</a>
         </li>
         <li class="navbar__items">
-          <a href="#" class="navbar__link">登入/註冊</a>
+          <a href="#" class="navbar__link" id="dialog-trigger">登入/註冊</a>
         </li>
       </ul>
     </div>
   </nav>
+
+  <dialog class="login-dialog dialog">
+    <button class="dialog__close-btn" type="button">
+      <img src="/static/img/dialog_close_btn.png">
+    </button>
+    <div class="dialog__decorator-bar"></div>
+    <div class="login-dialog__wrapper dialog__wapper">
+      <form class="dialog__form dialog__login-form" data-form="login">
+        <h2 class="dialog__title">登入會員帳號</h2>
+        <div class="dialog__filed">
+          <input class="dialog__input" type="email" name="email" placeholder="輸入電子信箱" required>
+        </div>
+        <div class="dialog__filed">
+          <input class="dialog__input" type="password" name="password" placeholder="輸入密碼" required>
+        </div>
+        <div class="dialog__filed">
+          <button class="dialog__form-btn login-btn" type="submit">登入帳戶</button>
+        </div>
+        <div class="dialog__switch">還沒有帳戶？點此註冊</div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog class="signup-dialog dialog">
+    <button class="dialog__close-btn" type="button">
+      <img src="/static/img/dialog_close_btn.png">
+    </button>
+    <div class="dialog__decorator-bar"></div>
+    <div class="signup-dialog__wrapper dialog__wapper">
+      <form class="dialog__form dialog__signup-form" data-form="signup">
+        <h2 class="dialog__title">註冊會員帳號</h2>
+        <div class="dialog__filed">
+          <input class="dialog__input" type="text" name="name" placeholder="輸入姓名" required>
+        </div>
+        <div class="dialog__filed">
+          <input class="dialog__input" type="email" name="email" placeholder="輸入電子信箱" required>
+        </div>
+        <div class="dialog__filed">
+          <input class="dialog__input" type="password" name="password" placeholder="輸入密碼" required>
+        </div>
+        <div class="dialog__filed">
+          <button class="dialog__form-btn signup-btn" type="submit">註冊新帳戶</button>
+        </div>
+        <div class="dialog__switch">已經有帳戶了？點此登入</div>
+      </form>
+    </div>
+  </dialog>
 
   <!-- ===== 圖片與預定表單 ===== -->
   <section class="attraction-page__top">

@@ -1,3 +1,32 @@
+// ============ Pop Up Dialog ============
+const LoginDialog = document.querySelector(".login-dialog")
+const signUpDialog = document.querySelector(".signup-dialog")
+
+const dialogTrigger = document.querySelector("[data-dialog-trigger]")
+dialogTrigger.addEventListener('click',(e)=>{
+    e.preventDefault()
+    LoginDialog.showModal()
+})
+
+const closeDialogButtons = document.querySelectorAll(".dialog__close-btn")
+closeDialogButtons.forEach(button=>{
+    button.addEventListener("click", (e)=>{
+        e.target.closest(".dialog").close()
+    })
+})
+
+const dialogSwitches = document.querySelectorAll(".dialog__switch")
+dialogSwitches.forEach(item=>{
+    item.addEventListener('click', (e)=>{
+        e.target.closest(".dialog").close()
+        if (e.target.closest(".dialog").classList.contains("signup-dialog")){
+            LoginDialog.showModal()
+        }else{
+            signUpDialog.showModal()
+        }
+    })
+})
+
 // ============ API請求 - 資料抓取 ============ 
 async function fetchData(url) {
     try{

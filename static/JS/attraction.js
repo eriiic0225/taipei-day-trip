@@ -24,10 +24,10 @@ function renderAttractionDetail(attractionDetail){
         slide.className = 'attraction-page__slide'
         if (idx === 0) slide.dataset.active = true
 
-        const slidePhoto = document.createElement('img')
+        const slidePhoto = new Image()
         slidePhoto.className = 'attraction-page__slide__photo'
         slidePhoto.src = url
-        slidePhoto.alt = `${attractionDetail.name}第${idx+1}照片`
+        slidePhoto.alt = `${attractionDetail.name}第${idx+1}張照片`
 
         slide.appendChild(slidePhoto)
         gallery.appendChild(slide)
