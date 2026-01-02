@@ -1,29 +1,38 @@
 // ============ Pop Up Dialog ============
-const LoginDialog = document.querySelector(".login-dialog")
-const signUpDialog = document.querySelector(".signup-dialog")
+const dialogs = {
+    login: document.querySelector(".login-dialog"),
+    signup: document.querySelector(".signup-dialog")
+}
 
+document.querySelectorAll(".dialog__switch").forEach(btn=>{
+    btn.addEventListener("click",(e)=>{
+        e.preventDefault()
+
+        // 抓取目前開啟的 dialog 是哪個
+        const currentDialog = btn.closest(".dialog")
+
+        // 判斷想要切換至哪個 dialog
+        const targetDialog = 
+            currentDialog.classList.contains("login-dialog")?
+            dialogs.signup : dialogs.login
+
+        currentDialog.close()
+        targetDialog.showModal()
+    })
+
+})
+
+// 預設一開始開啟的會是「登入」
 const dialogTrigger = document.querySelector("[data-dialog-trigger]")
 dialogTrigger.addEventListener('click',(e)=>{
     e.preventDefault()
-    LoginDialog.showModal()
+    dialogs.login.showModal()
 })
 
-const closeDialogButtons = document.querySelectorAll(".dialog__close-btn")
-closeDialogButtons.forEach(button=>{
+// 按 ❌ 關閉 dialog
+document.querySelectorAll(".dialog__close-btn").forEach(button=>{
     button.addEventListener("click", (e)=>{
-        e.target.closest(".dialog").close()
-    })
-})
-
-const dialogSwitches = document.querySelectorAll(".dialog__switch")
-dialogSwitches.forEach(item=>{
-    item.addEventListener('click', (e)=>{
-        e.target.closest(".dialog").close()
-        if (e.target.closest(".dialog").classList.contains("signup-dialog")){
-            LoginDialog.showModal()
-        }else{
-            signUpDialog.showModal()
-        }
+        button.closest(".dialog").close()
     })
 })
 

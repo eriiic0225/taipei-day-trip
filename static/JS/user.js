@@ -15,6 +15,22 @@ async function apiCall(url, method, payload){
     return result
 }
 
+// 顯示錯誤訊息
+function showMessage(form, message, isError = false){
+    const messageEl = form.querySelector(".dialog__message")
+
+    messageEl.textContent = message
+
+    isError?messageEl.style.color = "tomato":messageEl.style.color = "cornflowerblue"
+
+    messageEl.style.display = "block"
+
+    setTimeout(()=>{
+        messageEl.style.display = "none"
+    },5000)
+}
+
+
 
 // ==== 檢查登入狀態 - 頁面載入時自動確認用戶使否登入 ====
 async function checkUserStates(){
@@ -69,12 +85,16 @@ async function login(form) {
 
         console.log(result)
         localStorage.setItem("token", result.token)
-        location.reload()
+
+        showMessage(form, "✅ 登入成功！", false)
+
+        setTimeout(()=>{
+            location.reload()
+        },1000)
 
     }catch(error){
         console.error("登入失敗", error)
-        //! 這邊之後要改渲染
-        alert(`❌ ${error.message}`)
+        showMessage(form, `❌ ${error.message}`, true)
     }
 }
 
@@ -92,14 +112,17 @@ async function signUp(form) {
         // 如果註冊失敗會由子函式拋出錯誤
         const result = await apiCall("/api/user", "POST", payload)
 
-        //TODO 這邊要加成功的dialog訊息渲染，暫時用alert替代
-        alert("✅ 註冊成功!")
+        showMessage(form, "✅ 註冊成功!，請登入", false)
         form.reset()
+
+        setTimeout(()=>{
+            form.closest(".dialog").close()
+            dialogs.login.showModal()
+        },2000)
 
     }catch(error){
         console.error("註冊失敗：", error)
-        //TODO 這邊要加失敗的dialog訊息渲染，暫時用alert替代
-        alert(`❌ ${error.message}`)
+        showMessage(form, `❌ ${error.message}`, true)
     }
 }
 

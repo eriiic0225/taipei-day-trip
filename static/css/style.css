@@ -107,6 +107,12 @@ body {
     background-color:#397281;
 }
 
+.dialog__message {
+    color: tomato;
+    font-weight: 700;
+    display: none;
+}
+
 .dialog__switch {
     height: 22px;
     cursor: pointer;

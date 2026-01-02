@@ -53,7 +53,7 @@ async def create_user(data:CreateUserData, cnx=Depends(get_db)):
             status_code=400,
             content={
                 "error": True, 
-                "message": "註冊信息重複"
+                "message": "此email已註冊"
             }
         )
     
