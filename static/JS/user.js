@@ -1,3 +1,51 @@
+let dialogs
+
+// ============ 動態插入共用的 dialog ============
+async function loadAuthDialog() {
+    try{
+        const response = await fetch("/static/components/auth-dialog.html")
+        const html = await response.text()
+        document.body.insertAdjacentHTML("beforeend", html)
+        // console.log("✅ Auth dialog 載入成功")
+
+        dialogs = {
+            login: document.querySelector(".login-dialog"),
+            signup: document.querySelector(".signup-dialog")
+        }
+
+    }catch(e){
+        console.error("❌ Auth dialog 載入失敗:", error)
+    }
+}
+
+// ============ Pop Up Dialog 開關監聽 ============
+document.addEventListener("click", (e)=>{
+    // 打開 Dialog(預設Login)
+    if (e.target.matches("[data-dialog-trigger]")){
+        e.preventDefault()
+        dialogs.login.showModal()
+    }
+
+    // 登入/註冊切換
+    if (e.target.matches(".dialog__switch")){
+        e.preventDefault()
+
+        const currentDialog = e.target.closest(".dialog")
+        const targetDialog = 
+            currentDialog.classList.contains("login-dialog")?
+            dialogs.signup : dialogs.login
+
+        currentDialog.close()
+        targetDialog.showModal()
+    }
+
+    // 按 ❌ 關閉 dialog
+    if (e.target.closest(".dialog__close-btn")){
+        e.target.closest(".dialog").close()
+    }
+})
+
+
 // ==== 共用 - API 函式 ====
 async function apiCall(url, method, payload){
     const response = await fetch(url,{
@@ -14,22 +62,6 @@ async function apiCall(url, method, payload){
 
     return result
 }
-
-// 顯示錯誤訊息
-function showMessage(form, message, isError = false){
-    const messageEl = form.querySelector(".dialog__message")
-
-    messageEl.textContent = message
-
-    isError?messageEl.style.color = "tomato":messageEl.style.color = "cornflowerblue"
-
-    messageEl.style.display = "block"
-
-    setTimeout(()=>{
-        messageEl.style.display = "none"
-    },5000)
-}
-
 
 
 // ==== 檢查登入狀態 - 頁面載入時自動確認用戶使否登入 ====
@@ -65,10 +97,19 @@ async function checkUserStates(){
     }
 }
 
-// ==== 登出 ====
-function logout(){
-    localStorage.removeItem("token")
-    location.reload()
+// ==== 顯示錯誤訊息 ====
+function showMessage(form, message, isError = false){
+    const messageEl = form.querySelector(".dialog__message")
+
+    messageEl.textContent = message
+
+    isError?messageEl.style.color = "tomato":messageEl.style.color = "cornflowerblue"
+
+    messageEl.style.display = "block"
+
+    setTimeout(()=>{
+        messageEl.style.display = "none"
+    },5000)
 }
 
 // ==== 登入 ====
@@ -127,9 +168,10 @@ async function signUp(form) {
 }
 
 // ==== 監聽form提交 ====
-document.querySelectorAll(".dialog__form").forEach(form=>{
-    form.addEventListener("submit", async(e)=>{
+document.addEventListener("submit", async(e)=>{
+    if (e.target.matches(".dialog__form")){
         e.preventDefault()
+        let form = e.target
         const formType = form.dataset.form
 
         if (formType === "login"){
@@ -137,8 +179,21 @@ document.querySelectorAll(".dialog__form").forEach(form=>{
         } else if (formType === "signup"){
             await signUp(form)
         }
-    })
+    }
 })
 
+
+// ==== 登出 ====
+function logout(){
+    localStorage.removeItem("token")
+    location.reload()
+}
+
+
 // ==== 初始化 ====
-checkUserStates()
+async function initUserFeatures() {
+    await loadAuthDialog()
+    checkUserStates()
+}
+
+document.addEventListener("DOMContentLoaded", initUserFeatures);

@@ -20,8 +20,8 @@ body {
 /* ===== Pop-up Dialog ===== */
 .dialog {
     width: 340px;
-    position: fixed; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
+    position: fixed; top: 80px; left: 50%;
+    transform: translateX(-50%);
     border-radius: 5px;
     overflow: hidden;
     border: none;
