@@ -114,7 +114,14 @@ function showMessage(form, message, isError = false){
 
 // ==== 登入 ====
 async function login(form) {
+
+    const submitBtn = form.querySelector(".dialog__form-btn")
+    const originalText = submitBtn.textContent
+
     try{
+        submitBtn.disabled = true
+        submitBtn.textContent = "處理中..."
+
         const formData = new FormData(form)
 
         const payload = {
@@ -124,7 +131,6 @@ async function login(form) {
 
         const result = await apiCall("/api/user/auth", "PUT", payload)
 
-        console.log(result)
         localStorage.setItem("token", result.token)
 
         showMessage(form, "✅ 登入成功！", false)
@@ -136,12 +142,22 @@ async function login(form) {
     }catch(error){
         console.error("登入失敗", error)
         showMessage(form, `❌ ${error.message}`, true)
+    } finally {
+        submitBtn.disabled = false
+        submitBtn.textContent = originalText
     }
 }
 
 // ==== 註冊 ====
 async function signUp(form) {
+
+    const submitBtn = form.querySelector(".dialog__form-btn")
+    const originalText = submitBtn.textContent
+
     try{
+        submitBtn.disabled = true
+        submitBtn.textContent = "處理中..."
+
         const formData = new FormData(form)
 
         const payload = {
@@ -164,6 +180,9 @@ async function signUp(form) {
     }catch(error){
         console.error("註冊失敗：", error)
         showMessage(form, `❌ ${error.message}`, true)
+    } finally {
+        submitBtn.disabled = false
+        submitBtn.textContent = originalText
     }
 }
 

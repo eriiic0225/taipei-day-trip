@@ -41,6 +41,7 @@ body {
     align-items: center;
 }
 
+
 .dialog__close-btn img {
     height: 16px;
     width: 16px;
@@ -105,6 +106,11 @@ body {
 
 .dialog__form-btn:hover {
     background-color:#397281;
+}
+
+.dialog__form-btn:disabled {
+    opacity: 0.8;
+    cursor: progress;
 }
 
 .dialog__message {
