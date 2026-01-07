@@ -134,3 +134,5 @@ async function attractionPageInit(){
     initIndicatorEventListener()
 }
 attractionPageInit()
+
+//! week5 範圍

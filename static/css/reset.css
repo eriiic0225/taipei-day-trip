@@ -13,7 +13,7 @@ html {
 }
 
 body {
-    font-family:'Noto Sans TC', sans-serif;
+    font-family:'Noto Sans TC', 'Noto Sans CJK TC', 'Source Han Sans TC', sans-serif;
     /* line-height: 1.5;
     color: #333; */
     background: #ffffff;

@@ -3,9 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Booking</title>
+  <title>台北一日遊</title>
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/booking.css">
+  <script src="/static/JS/utils.js" async></script>
+  <script src="/static/JS/user.js" defer></script>
 </head>
+
 <body>
-  
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__logo"><a href="/">台北一日遊</a></div>
+      <ul class="navbar__list">
+        <li class="navbar__items">
+          <a href="#" class="navbar__link">預定行程</a>
+        </li>
+        <li class="navbar__items navbar_login-states">
+          <a href="#" class="navbar__link" data-dialog-trigger="true">登入/註冊</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="booking__warp">
+
+    <h2 class="booking__headline">您好，<span class="booking__user-name">User</span>，待預訂的行程如下：</h2>
+    <div class="no-booking">目前沒有任何待預訂的行程</div>
+    <div class="attraction__container booking__section has-booking">
+      <div class="booking__attraction__pic">
+        <img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11001481.jpg" alt="景點照片">
+      </div>
+      <div class="booking__attraction__detail">
+        <div class="booking__attraction__title">台北一日遊：南港山系-象山親山步道</div>
+        <p class="booking__field">日期： <span class="booking__date">2026-01-05</span></p>
+        <p class="booking__field">時間： <span class="booking__time">早上 9 點到下午 4 點</span></p>
+        <p class="booking__field">費用： <span class="booking__price">新台幣 2000 元</span></p>
+        <p class="booking__field">地點： <span class="booking__address">臺北市 信義區信義路五段150巷</span></p>
+        <button type="button" class="booking__delete-btn">
+          <img src="/static/img/icon_delete.png" alt="刪除行程">
+        </button>
+      </div>
+    </div>
+
+    <div class="separator has-booking"></div>
+
+    <div class="booking__contact booking__section has-booking">
+      <h2 class="contact__title booking__title">您的聯絡資訊</h2>
+      <form class="contact__form booking__form">
+        <div class="contact__field booking__form__field">
+          <lable for="name" class="booking__input-label">聯絡姓名：</lable>
+          <input type="text" name="name" id="name" maxlength="50" required>
+        </div>
+        <div class="contact__field booking__form__field">
+          <lable for="email" class="booking__input-label">聯絡信箱： </lable>
+          <input type="email" name="email" id="email" required>
+        </div>
+        <div class="contact__field booking__form__field">
+          <lable for="phone" class="booking__input-label">手機號碼：</lable>
+          <input type="tel" name="phone" id="phone" required>
+        </div>
+      </form>
+      <p class="contact__memo">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</p>
+    </div>
+    <div class="separator has-booking"></div>
+
+    <div class="booking__card-info booking__section has-booking">
+      <h2 class="card-info__title booking__title">卡片付款資訊</h2>
+      <form class="card-info__form booking__form">
+        <div class="card-info__field booking__form__field">
+          <lable for="card-number" class="booking__input-label">卡片號碼：</lable>
+          <input type="text" name="card-number" id="card-number" autocomplete="cc-number" maxlength="19" pattern="[0-9]{13,19}" placeholder="**** **** **** ****" required>
+        </div>
+        <div class="card-info__field booking__form__field">
+          <lable for="card-expire-time" class="booking__input-label">過期時間： </lable>
+          <input type="email" name="card-expire-time" id="card-expire-time" autocomplete="cc-exp" pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$" placeholder="MM / YY" maxlength="5"" required>
+        </div>
+        <div class="card-info__field booking__form__field">
+          <lable for="cvv" class="booking__input-label">驗證密碼：</lable>
+          <input type="tel" name="cvv" id="cvv" autocomplete="cc-csc" placeholder="CVV" maxlength="4" pattern="[0-9]{3,4}" required>
+        </div>
+      </form>
+    </div>
+    <div class="separator has-booking"></div>
+
+    <div class="booking__total booking__section has-booking">
+      <p class="booking__total__price">總價：新台幣 2000 元</p>
+      <button type="button" class="booking__total__confirm-btn">確認訂購並付款</button>
+    </div>
+
+  </div>
+
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer__copy-right">COPYRIGHT © 2025 台北一日遊</div>
+  </footer>
+
 </body>
 </html>
