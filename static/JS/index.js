@@ -235,6 +235,6 @@ const observer = new IntersectionObserver((entries)=>{
         loadMore()                           // 防止footer被向下推出視窗時二次觸發IntersectionObserver
     }
 },{
-    threshold: 0.3
+    threshold: 0.3 // 當被監聽元素露出/消失 30% 時觸發
 })
 observer.observe(footer)

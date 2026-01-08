@@ -233,12 +233,12 @@ body {
 }
 
 /* ===== 先將所有 has-booking(有訂單才會出現的元素)隱藏 ===== */
-/* .has-booking {
-    display: none;
-} */
-
 .no-booking {
     display: none;
+}
+
+.booking__no-booking-message {
+    /* display: none; */
     width: min(1000px, calc(100% - 20px));
     color: var(--secondary);
     font-size: 16px;
