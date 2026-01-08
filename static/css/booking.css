@@ -116,7 +116,7 @@ body {
 .booking__attraction__detail {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 34px repeat(4, 24px);
+    grid-template-rows: auto repeat(4, 24px);
     gap:10px;
     position: relative;
 }
@@ -126,6 +126,9 @@ body {
     color: var(--primary);
     font-weight: 700;
     margin: 5px 0;
+    word-break: keep-all;
+    line-break: loose;
+    overflow-wrap: break-word;
 }
 
 .booking__field {
@@ -215,6 +218,12 @@ body {
     opacity: 0.8;
     cursor: progress;
 }
+
+/* @media (max-width:700px){
+    .booking__attraction__title {
+        max-width: 235px;
+    }
+} */
 
 @media(max-width:600px){
     .attraction__container{

@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async()=>{
 });
 
 function renderBookingPageDetail(bookingDetail){
-    console.log(bookingDetail)
     const hasBookingElements = document.querySelectorAll(".no-booking")
     hasBookingElements.forEach(el=>{
         el.classList.remove("no-booking")
@@ -22,7 +21,7 @@ function renderBookingPageDetail(bookingDetail){
 
     document.querySelector(".booking__attraction__pic img").src = bookingDetail.attraction.image
     document.querySelector(".booking__attraction__pic img").alt = bookingDetail.attraction.name
-    document.querySelector(".booking__attraction__title").textContent = `台北一日遊：${bookingDetail.attraction.name}`
+    document.querySelector(".booking__attraction__title span").textContent = bookingDetail.attraction.name
     document.querySelector(".booking__date").textContent = bookingDetail.date
     document.querySelector(".booking__time").textContent = 
         bookingDetail.time === "morning"? "早上 9 點到下午 4 點" : "下午 2 點到晚上 9 點"
