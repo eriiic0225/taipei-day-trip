@@ -45,59 +45,7 @@ document.addEventListener("click", (e)=>{
     }
 })
 
-
-// ==== 共用 - API 函式 ====
-async function apiCall(url, method, payload){
-    const response = await fetch(url,{
-        method,
-        headers:{"Content-Type": "application/json"},
-        body: JSON.stringify(payload)
-    })
-
-    const result = await response.json()
-
-    if (result.error){
-        throw new Error(result.message)
-    }
-
-    return result
-}
-
-
-// ==== 檢查登入狀態 - 頁面載入時自動確認用戶使否登入 ====
-async function checkUserStates(){
-    const token = localStorage.getItem("token")
-    if (!token) return
-    try{
-        let response = await fetch("/api/user/auth",{
-            method:"GET",
-            headers:{
-                "Authorization": "Bearer " + token
-            }
-        })
-        if (!response.ok){
-            throw new Error(`伺服器錯誤: ${response.status}`)
-        }
-        let result
-        try {
-            result = await response.json()
-        } catch (e) {
-            throw new Error("伺服器返回了無效的 JSON")
-        }
-        if (!result.data){
-            //移除無效的 token
-            localStorage.removeItem("token")
-        }
-        //渲染 - 從「登入註冊」改「登出系統」
-        const loginStates = document.querySelector(".navbar_login-states")
-        loginStates.innerHTML = 
-            `<a href="#" class="navbar__link" onclick=logout()>登出系統</a>`
-    }catch(error){
-        console.error("伺服器錯誤：", error)
-    }
-}
-
-// ==== 顯示錯誤訊息 ====
+// ==== 顯示錯誤訊息(給登入/註冊使用) ====
 function showMessage(form, message, isError = false){
     const messageEl = form.querySelector(".dialog__message")
 
@@ -186,7 +134,7 @@ async function signUp(form) {
     }
 }
 
-// ==== 監聽form提交 ====
+// ==== 監聽登入＆註冊的form提交 ====
 document.addEventListener("submit", async(e)=>{
     if (e.target.matches(".dialog__form")){
         e.preventDefault()
@@ -208,11 +156,68 @@ function logout(){
     location.reload()
 }
 
+//! ==== 檢查登入狀態 - 頁面載入時自動確認用戶使否登入 ====
+async function checkUserStates(){
+    const token = localStorage.getItem("token")
+    if (!token) return null
+    try{
+        let response = await fetch("/api/user/auth",{
+            method:"GET",
+            headers:{
+                "Authorization": "Bearer " + token
+            }
+        })
+        if (!response.ok){
+            throw new Error(`伺服器錯誤: ${response.status}`)
+        }
+        let result
+        try {
+            result = await response.json()
+        } catch (e) {
+            throw new Error("伺服器返回了無效的 JSON")
+        }
+        if (!result.data){
+            //移除無效的 token
+            localStorage.removeItem("token")
+            return null
+        }
+        return result.data
+    }catch(error){
+        console.error("伺服器錯誤：", error)
+        return null
+    }
+}
+
+
+// ==== 確認所有頁面右上角的登入/登出的顯示狀態 ====
+async function RenderLoginStatus(){
+    const user = await checkUserStates() 
+    if (user){
+        //如果登入成功 => 渲染 - 從「登入註冊」改「登出系統」
+        const loginStates = document.querySelector(".navbar_login-states")
+        loginStates.innerHTML = 
+            `<a href="#" class="navbar__link" onclick="logout()">登出系統</a>`
+    }
+}
 
 // ==== 初始化 ====
 async function initUserFeatures() {
     await loadAuthDialog()
-    checkUserStates()
+    await RenderLoginStatus()
+    BookingPageRedirctCheck() // week 5 
 }
 
 document.addEventListener("DOMContentLoaded", initUserFeatures);
+
+//! week 5 - booking跳轉邏輯函式包裝
+function BookingPageRedirctCheck(){
+    document.querySelector("[data-booking]").addEventListener("click",async(e)=>{
+        e.preventDefault()
+        const user = await checkUserStates()
+        if (!user) {
+            dialogs.login.showModal()
+        }else{
+            window.location.assign("/booking")
+        }
+    })
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
       <div class="navbar__logo"><a href="/">台北一日遊</a></div>
       <ul class="navbar__list">
         <li class="navbar__items">
-          <a href="#" class="navbar__link">預定行程</a>
+          <a href="/booking" class="navbar__link" data-booking>預定行程</a>
         </li>
         <li class="navbar__items navbar_login-states">
           <a href="#" class="navbar__link" data-dialog-trigger="true">登入/註冊</a>
@@ -46,7 +46,7 @@
       </div>
 
       <div class="attraction-page__profile">
-        <h3 class="attraction-page__name">載入中...</h3>
+        <h3 class="attraction-page__name" data-id="">載入中...</h3>
         <div class="attraction-page__info">
           <span class="attraction-page__category">載入中...</span>
           at <span class="attraction-page__mrt">暫無相關資訊</span>
@@ -62,24 +62,24 @@
           <div class="attraction-page__booking-time">
             <span class="attraction-page__selete">選擇時間：</span>
             <label>
-              <input type="radio" name="book-time" data-price="2000" checked>上半天
+              <input type="radio" name="book-time" value="morning" data-price="2000" checked>上半天
             </label>
             <label >
-              <input type="radio" name="book-time" data-price="2500">下半天
+              <input type="radio" name="book-time" value="afternoon" data-price="2500">下半天
             </label>
             
           </div>
           <div class="attraction-page__booking-fee attraction-page__selete">
             導覽費用： <span class="attraction-page__booking-fee__total">新台幣 2000 元</span>
           </div>
-          <button class="attraction-page__book-btn" type="button">開始預定行程</button>
+          <button class="attraction-page__book-btn" type="submit">開始預定行程</button>
         </form>
       </div>
     </div>
 
   </section>
 
-  <div class="sepatator"></div>
+  <div class="separator"></div>
 
   <section class="attraction-page__bot">
     <div class="attraction-page__bot-layout">

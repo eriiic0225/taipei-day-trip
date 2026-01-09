@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field, EmailStr # 自動輸入驗證與型別轉
 
 # 引入搬移出去的代碼
 from database.connection import lifespan
-from routers import attractions, user
+from routers import attractions, user, user_booking
 
 #------------------- 取得環境變數內的敏感資料 --------------------
 load_dotenv()
@@ -57,6 +57,7 @@ async def thankyou(request: Request):
 # 包含路由器
 app.include_router(attractions.router)
 app.include_router(user.router)
+app.include_router(user_booking.router)
 
 # ------------------- 統一處理靜態網頁 --------------------
 # 物件名稱.mount("網頁前綴", StaticFiles(directory="資料夾名稱"),name="內部名稱")

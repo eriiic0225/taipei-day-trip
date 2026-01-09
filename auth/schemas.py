@@ -26,3 +26,21 @@ class UserResponse(BaseModel):
 # 用來捕捉自定義錯誤，以符合任務API文件要求的規格
 class MyCustomError(Exception):
     pass
+
+class BookingData(BaseModel):
+    attractionId: int
+    date: str
+    time: str
+    price: int
+
+class BookingAttraction(BaseModel):
+    id: int
+    name: str
+    address: str
+    image: str
+
+class Booking(BaseModel):
+    attraction: Optional[BookingAttraction]
+    date: Optional[str]
+    time: Optional[str]
+    price: Optional[int]

@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field, EmailStr # 自動輸入驗證與型別轉
 from bcrypt import hashpw, gensalt, checkpw # 用來將密碼加密儲存
 from mysql.connector import errors
 from auth.schemas import TokenPayload, Token, UserResponse, MyCustomError
-from auth.service import create_access_token, decode_access_token
+from auth.service import create_access_token
 from auth.dependencies import verify_token
 
 

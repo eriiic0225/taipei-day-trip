@@ -43,6 +43,7 @@ function renderAttractionDetail(attractionDetail){
     // 渲染其他文字細節
     const attractionName = document.querySelector('.attraction-page__name')
     attractionName.textContent = attractionDetail.name
+    attractionName.dataset.id = attractionDetail.id
 
     const attractionCategory = document.querySelector('.attraction-page__category')
     attractionCategory.textContent = attractionDetail.category
@@ -134,3 +135,23 @@ async function attractionPageInit(){
     initIndicatorEventListener()
 }
 attractionPageInit()
+
+//! week5 範圍
+const bookingForm = document.querySelector(".attraction-page__booking-form")
+bookingForm.addEventListener("submit",async(e)=>{
+    e.preventDefault()
+    const user = await checkUserStates()
+    if (!user){
+        dialogs.login.showModal()
+        return
+    }
+    try{
+        const bookingSuccess = await sendBookingRequest()
+        if (bookingSuccess){
+            window.location.assign("/booking")
+        }
+    }catch(err){
+        console.error(err)
+        alert(err.message)
+    }
+})
