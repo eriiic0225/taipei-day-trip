@@ -1,17 +1,15 @@
 from fastapi import *
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles # 靜態網頁資料處理 / 各種檔案
 from starlette.middleware.sessions import SessionMiddleware # 使用者狀態管理（week 1尚未使用）
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
-from bcrypt import hashpw, gensalt, checkpw # 用來將密碼加密儲存
-from pydantic import BaseModel, Field, EmailStr # 自動輸入驗證與型別轉換
 
 # 引入搬移出去的代碼
 from database.connection import lifespan
-from routers import attractions, user, user_booking
-
+from api import attractions, user
+from api import booking as booking_api # 改名引入，避開下方的 def booking(不然會報錯)
 #------------------- 取得環境變數內的敏感資料 --------------------
 load_dotenv()
 session_key = os.getenv("SECRET_KEY") # session金鑰
@@ -57,7 +55,7 @@ async def thankyou(request: Request):
 # 包含路由器
 app.include_router(attractions.router)
 app.include_router(user.router)
-app.include_router(user_booking.router)
+app.include_router(booking_api.router)
 
 # ------------------- 統一處理靜態網頁 --------------------
 # 物件名稱.mount("網頁前綴", StaticFiles(directory="資料夾名稱"),name="內部名稱")

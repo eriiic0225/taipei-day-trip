@@ -99,7 +99,7 @@ async function sendBookingRequest(){
 }
 
 // ======== 關於圖片預先加載 ========
-// 多圖片加載
+// 多圖片預加載
 function imagesPreload(urls){
     return Promise.all(
         urls.map(url => new Promise((resolve, reject)=>{

@@ -3,8 +3,8 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 import jwt
-from auth.config import JWT_SECRET_KEY, JWT_ALGORITHM, ACCESS_TOKEN_EXPIRE_DAYS
-from auth.schemas import TokenPayload
+from services.config import JWT_SECRET_KEY, JWT_ALGORITHM, ACCESS_TOKEN_EXPIRE_DAYS
+from models.user import TokenPayload
 
 # 生成 token
 def create_access_token(
