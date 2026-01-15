@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from typing import Optional
 import json
 from database.connection import get_db # 記得從連線那邊引入連線的函式
+from services.attraction_services import get_attraction_from_db
 
 router = APIRouter(prefix="/api", tags=["attractions"])
 # prefix代表所有這邊的路由前面都會自動加上"/api"
@@ -97,25 +98,7 @@ async def search_attractions(
 async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
 	cursor = cnx.cursor(dictionary=True) #抓資訊
 	try:
-		cursor.execute(
-			"""SELECT 
-				a.id, 
-				a.name,
-				a.category,
-				a.description, 
-				a.address, 
-				a.transport, 
-				a.mrt, 
-				a.lat, 
-				a.lng,
-				JSON_ARRAYAGG(ai.image_url) AS images 
-			FROM attractions a 
-			LEFT JOIN attractions_images ai
-			ON a.id = ai.attraction_id
-			WHERE a.id=%s
-			GROUP BY a.id"""
-			,(attractionsId,)) # 單元素tuple結尾括號前要記得加逗號，不然python無法判斷這是tuple還是普通字串
-		attraction = cursor.fetchone()
+		attraction = get_attraction_from_db(attractionsId, cursor)
 
 		if not attraction:
 			return JSONResponse(
@@ -125,9 +108,6 @@ async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
 					"message": "景點編號查無資料"
 				}
 			)
-		
-		if isinstance(attraction['images'], str): # 如果是字串
-			attraction['images'] = json.loads(attraction['images']) # 轉成陣列
 
 		return {"data": attraction}
 
@@ -140,7 +120,7 @@ async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
 				"message": f"伺服器內部錯誤:{str(e)}"
 			}
 		)
-    
+	
 	finally:
 		cursor.close()
 

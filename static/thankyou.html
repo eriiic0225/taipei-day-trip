@@ -1,11 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thank You</title>
+  <title>台北一日遊</title>
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/booking.css">
+  <script src="/static/JS/utils.js" async></script>
+  <script src="/static/JS/user.js" defer></script>
+  <script src="/static/JS/thankyou.js" defer></script>
 </head>
 <body>
-  
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar__logo"><a href="/">台北一日遊</a></div>
+      <ul class="navbar__list">
+        <li class="navbar__items">
+          <a href="/booking" class="navbar__link" data-booking>預定行程</a>
+        </li>
+        <li class="navbar__items navbar_login-states">
+          <a href="#" class="navbar__link" data-dialog-trigger="true">登入/註冊</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="booking__warp">
+    <h2 class="order__headline">Hi <span class="order__user-name">User</span>，付款成功！</h2>
+    <p>您預定編號如下</p>
+    <div class="order-number"></div>
+
+    <div class="order-notice">請保留此訂單編號，或到會員中心查詢歷史訂單</div>
+
+    <div class="attraction__container order__section">
+      <div class="booking__attraction__pic">
+        <img src="" alt="景點照片">
+      </div>
+      <div class="order__attraction__detail">
+        <div class="order__attraction__title">台北一日遊：<span>載入中...</span></div>
+        <p class="booking__field">日期： <span class="booking__date">載入中...</span></p>
+        <p class="booking__field">時間： <span class="booking__time">載入中...</span></p>
+        <p class="booking__field">費用： <span class="booking__price">載入中...</span></p>
+        <p class="booking__field">地點： <span class="booking__address">載入中...</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer__copy-right">COPYRIGHT © 2025 台北一日遊</div>
+  </footer>
 </body>
 </html>

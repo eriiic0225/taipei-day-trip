@@ -162,6 +162,8 @@ body {
 .booking__form__field {
     font-weight: 400;
     align-content: center;
+    display: flex;
+    align-items: center;
 }
 
 .booking__form__field input{
@@ -181,6 +183,16 @@ body {
 .contact__memo {
     margin-top: 15px;
     font-weight: 700;
+}
+
+/* 針對 tappay 輸入框的style設定 */
+.tpfield {
+    height: 38px;
+    width: 200px;
+    border: 1px solid rgba(232, 232, 232, 1);
+    border-radius: 5px;
+    /* margin: 5px 0; */
+    padding: 10px;
 }
 
 /* sec.4 總價及確認訂購 */
@@ -216,14 +228,8 @@ body {
 
 .booking__total__confirm-btn:disabled {
     opacity: 0.8;
-    cursor: progress;
+    cursor: not-allowed;
 }
-
-/* @media (max-width:700px){
-    .booking__attraction__title {
-        max-width: 235px;
-    }
-} */
 
 @media(max-width:600px){
     .attraction__container{
@@ -254,6 +260,46 @@ body {
     font-weight: 400;
 }
 
+
+/* ===== thanks you page ===== */
+.order__section {
+    width: min(600px, calc(100% - 20px));
+}
+
+.order__headline {
+    text-align: center;
+    margin: 30px 0 10px 0;
+    width: min(1000px, calc(100% - 20px));
+    color: var(--secondary);
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.order-number {
+    margin: 10px 0 10px 0;
+}
+
+.order-notice {
+    margin-bottom: 20px;
+}
+
+.order__attraction__detail {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 36px repeat(4, 24px);
+    gap: 10px;
+    position: relative;
+}
+
+.order__attraction__title {
+    align-content: center;
+    color: var(--primary);
+    font-weight: 700;
+    margin: 5px 0;
+    word-break: keep-all;
+    line-break: loose;
+    overflow-wrap: break-word;
+}
 
 /* ===== Footer 區域 ===== */
 .footer {

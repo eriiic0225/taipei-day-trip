@@ -85,7 +85,7 @@ function renderCards(attractions){
     const preloadPromises = attractions.map((item,idx)=>{
         const url = item.images[0]
         return ImgPreload(url)
-            .then(()=>console.log(`✅ 第${idx+1}張圖片加載成功`, url))
+            // .then(()=>console.log(`✅ 第${idx+1}張圖片加載成功`, url))
             .catch(()=>console.error(`❌ 第${idx+1}張圖片加載失敗`, url))
     })
     Promise.all(preloadPromises)

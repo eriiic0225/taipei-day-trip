@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 # 引入搬移出去的代碼
 from database.connection import lifespan
-from api import attractions, user
+from api import attractions, user, order
 from api import booking as booking_api # 改名引入，避開下方的 def booking(不然會報錯)
 #------------------- 取得環境變數內的敏感資料 --------------------
 load_dotenv()
@@ -56,6 +56,7 @@ async def thankyou(request: Request):
 app.include_router(attractions.router)
 app.include_router(user.router)
 app.include_router(booking_api.router)
+app.include_router(order.router)
 
 # ------------------- 統一處理靜態網頁 --------------------
 # 物件名稱.mount("網頁前綴", StaticFiles(directory="資料夾名稱"),name="內部名稱")

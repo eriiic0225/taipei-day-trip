@@ -2,13 +2,13 @@
 from fastapi import APIRouter, Query, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional
-import json
 from database.connection import get_db
-from pydantic import BaseModel, Field, EmailStr # 自動輸入驗證與型別轉換
-from bcrypt import hashpw, gensalt, checkpw # 用來將密碼加密儲存
 from mysql.connector import errors
-from models.user import TokenPayload, Token, UserResponse, MyCustomError
-from services.user_service import create_access_token
+from models.user import CreateUserData, LoginData
+from models.user import TokenPayload, Token, UserResponseData
+from core.config import MyCustomError
+from services import user_service
+from services.user_service import get_hashed_password, verify_password, create_access_token, get_user_by_email
 from core.dependencies import verify_token
 
 
@@ -17,11 +17,6 @@ router = APIRouter(prefix="/api/user", tags=["user"])
 
 
 # ========== 註冊 =========
-class CreateUserData(BaseModel):
-    name: str = Field(..., min_length=1, max_length=50)
-    email: EmailStr  # 自動驗證郵箱格式
-    password: str
-
 @router.post("/")
 async def create_user(data:CreateUserData, cnx=Depends(get_db)):
     cursor = None
@@ -29,22 +24,13 @@ async def create_user(data:CreateUserData, cnx=Depends(get_db)):
     email = data.email.strip()
     password = data.password.strip()
 
-    salt = gensalt()
-    encode_password = password.encode('utf-8') #字串 → 位元組（bytes）/ 字符串轉成位元組
-    hash_password = hashpw(encode_password, salt) #透過hashpw()把兩個位元組(密碼本身和鹽值)透過演算法打散混合
+    hash_password = get_hashed_password(password)
 
     try:
-        cursor = cnx.cursor()
-        cursor.execute("""
-            INSERT INTO user(name, email, password)
-            VALUES(%s, %s, %s)
-        """,(name, email, hash_password))
-        cnx.commit()
+        
+        user_service.create_user_in_db(cnx, name, email, hash_password)
 
-        return JSONResponse(
-            status_code=200,
-            content={"ok": True}
-        )
+        return {"ok": True}
 
     except errors.IntegrityError as e:
         cnx.rollback()
@@ -84,19 +70,13 @@ async def create_user(data:CreateUserData, cnx=Depends(get_db)):
             cursor.close()
 
 # ========== 登入 / 回傳 JWT token =========
-class LoginData(BaseModel):
-    email: EmailStr
-    password: str
-
-
 @router.put("/auth")
 async def user_login(data:LoginData, cnx=Depends(get_db)):
     email = data.email.strip()
     password = data.password.strip()
     cursor = cnx.cursor(dictionary=True)
     try:
-        cursor.execute("""SELECT * FROM user WHERE email=%s""",(email,))
-        result = cursor.fetchone()
+        result = get_user_by_email(cursor, email)
 
         if not result:
             raise MyCustomError("此email尚未註冊！")
@@ -105,13 +85,7 @@ async def user_login(data:LoginData, cnx=Depends(get_db)):
         user_name = result['name']
         stored_hashed_pwd = result['password']
 
-        # 把從資料庫取出的加密密碼轉回 bytes
-        # 檢查 stored_hashed_pwd 是否是字符串
-        if isinstance(stored_hashed_pwd, str): #如果是 str → 轉換成 bytes
-            stored_hashed_pwd = stored_hashed_pwd.encode('utf-8')
-
-        password = password.encode('utf-8') # 把從前端收到的結果轉換後才能比對
-        is_password_correct = checkpw(password, stored_hashed_pwd)
+        is_password_correct = verify_password(password, stored_hashed_pwd)
 
         if not is_password_correct:
             raise MyCustomError("密碼不正確")
@@ -154,7 +128,7 @@ async def get_current_user(
     if payload is None:
         return {"data": None}
     
-    user_data = UserResponse(id=payload.id, name=payload.name, email=payload.email)
+    user_data = UserResponseData(id=payload.id, name=payload.name, email=payload.email)
 
     return {
         "data":user_data
