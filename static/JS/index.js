@@ -81,7 +81,17 @@ mrtList.addEventListener('click',(e)=>{
 
 // ============ 景點渲染函式 ============ 
 function renderCards(attractions){
+    //week 5 加入圖片預加載機制
+    const preloadPromises = attractions.map((item,idx)=>{
+        const url = item.images[0]
+        return ImgPreload(url)
+            // .then(()=>console.log(`✅ 第${idx+1}張圖片加載成功`, url))
+            .catch(()=>console.error(`❌ 第${idx+1}張圖片加載失敗`, url))
+    })
+    Promise.all(preloadPromises)
+        .then(() => console.log('✅ 全部完成'))
 
+    // 渲染
     attractions.forEach( item => {
 
         // 創造容器＆子元素

@@ -37,7 +37,7 @@ async function apiCall(url, method, payload){
     return result
 }
 
-// ==== 需要驗證身份的 API call (with body)====
+// ==== 需要驗證身份的 API call (with body) ====
 async function authApiCall(url, method, payload){
     const token = localStorage.getItem("token")
     if (!token) return null
@@ -58,7 +58,7 @@ async function authApiCall(url, method, payload){
     return result
 }
 
-// ==== 需要驗證身份的 API call (GET or Delete/不能有body)====
+// ==== 需要驗證身份的 API call (GET or Delete/不能有body) ====
 async function authApiCallGet(url, method){
     const token = localStorage.getItem("token")
     if (!token) return null
@@ -96,4 +96,27 @@ async function sendBookingRequest(){
         throw new Error(result.message)
     }
     return true
+}
+
+// ======== 關於圖片預先加載 ========
+// 多圖片預加載
+function imagesPreload(urls){
+    return Promise.all(
+        urls.map(url => new Promise((resolve, reject)=>{
+            const img = new Image
+            img.onload = () => resolve({ url, status: 'loaded' });
+            img.onerror = () => reject({ url, status: 'failed' });
+            img.src = url
+        }))
+    )
+}
+
+// 單圖片預加載
+function ImgPreload(url){
+    return new Promise((resolve, reject)=>{
+        const img = new Image
+        img.onload = () => resolve({ url, status: 'loaded' });
+        img.onerror = () => reject({ url, status: 'failed' });
+        img.src = url
+    })
 }

@@ -3,8 +3,27 @@
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 import jwt
-from auth.config import JWT_SECRET_KEY, JWT_ALGORITHM, ACCESS_TOKEN_EXPIRE_DAYS
-from auth.schemas import TokenPayload
+from core.config import JWT_SECRET_KEY, JWT_ALGORITHM, ACCESS_TOKEN_EXPIRE_DAYS
+from models.user import TokenPayload
+from bcrypt import hashpw, gensalt, checkpw
+
+
+def get_hashed_password(password: str) -> bytes:
+    salt = gensalt()
+    encode_password = password.encode('utf-8') #字串 → 位元組（bytes）/ 字符串轉成位元組
+    return hashpw(encode_password, salt) 
+    #透過hashpw()把兩個位元組(密碼本身和鹽值)透過演算法打散混合
+
+
+def verify_password(plain_password: str, hashed_password)-> bool:
+    # 檢查 hashed_password 是否是字符串
+    if isinstance(hashed_password, str): #如果是 str → 轉換成 bytes
+        hashed_password = hashed_password.encode('utf-8')
+    
+    plain_password = plain_password.encode('utf-8')
+
+    return checkpw(plain_password, hashed_password)
+
 
 # 生成 token
 def create_access_token(
@@ -69,3 +88,20 @@ def decode_access_token(token: str) -> Optional[TokenPayload]:
     except jwt.InvalidTokenError:
         print("Token 無效")
         return None
+
+
+def get_user_by_email(cursor, email:str):
+    """根據 Email 從資料庫取得使用者資料"""
+    cursor.execute("SELECT * FROM user WHERE email=%s",(email,))
+    return cursor.fetchone()
+
+
+def create_user_in_db(cnx, name, email, hashed_password):
+    """執行註冊 SQL"""
+    cursor = cnx.cursor()
+    cursor.execute("""
+        INSERT INTO user(name, email, password)
+        VALUES(%s, %s, %s)
+    """,(name, email, hashed_password))
+    cnx.commit()
+    cursor.close()

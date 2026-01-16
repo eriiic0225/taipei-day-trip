@@ -128,7 +128,15 @@ function initIndicatorEventListener(){
 async function attractionPageInit(){
     const rawData = await fetchData(`/api/attraction/${getAttractionIdFromURL()}`)
 
-    if (rawData) renderAttractionDetail(rawData.data)
+    if (rawData) {
+
+        imagesPreload(rawData.data.images)
+            .then((result)=>console.log(`全部圖片預載成功🎊 ,${result}`))
+            .catch((error)=>console.error(`有圖片預載失敗🫠 ,${error}`))
+        
+        renderAttractionDetail(rawData.data)
+        console.log("頁面渲染完成")
+    }
 
     initSlideShow()
 

@@ -4,10 +4,10 @@ from fastapi.responses import JSONResponse
 from typing import Optional
 from database.connection import get_db
 import mysql.connector
-from auth.schemas import TokenPayload, BookingData, Booking, BookingAttraction
-from auth.dependencies import verify_token
+from models.user import TokenPayload
+from models.booking import BookingData, Booking, BookingAttraction
+from core.dependencies import verify_token
 from datetime import date
-# from mysql.connector import Error, errors
 
 router = APIRouter(prefix="/api", tags=["booking"])
 

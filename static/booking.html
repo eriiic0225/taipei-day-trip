@@ -9,6 +9,8 @@
   <script src="/static/JS/utils.js" async></script>
   <script src="/static/JS/user.js" defer></script>
   <script src="/static/JS/booking.js" defer></script>
+  <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0" defer></script>
+  <script src="/static/JS/tappay.js" defer></script>
 </head>
 
 <body>
@@ -51,17 +53,17 @@
 
     <div class="booking__contact booking__section no-booking">
       <h2 class="contact__title booking__title">您的聯絡資訊</h2>
-      <form class="contact__form booking__form">
+      <form id="orderForm" class="contact__form booking__form">
         <div class="contact__field booking__form__field">
-          <lable for="name" class="booking__input-label">聯絡姓名：</lable>
+          <label for="name" class="booking__input-label">聯絡姓名：</label>
           <input type="text" name="name" id="name" maxlength="50" required>
         </div>
         <div class="contact__field booking__form__field">
-          <lable for="email" class="booking__input-label">聯絡信箱： </lable>
+          <label for="email" class="booking__input-label">聯絡信箱： </label>
           <input type="email" name="email" id="email" required>
         </div>
         <div class="contact__field booking__form__field">
-          <lable for="phone" class="booking__input-label">手機號碼：</lable>
+          <label for="phone" class="booking__input-label">手機號碼：</label>
           <input type="tel" name="phone" id="phone" required>
         </div>
       </form>
@@ -73,24 +75,25 @@
       <h2 class="card-info__title booking__title">卡片付款資訊</h2>
       <form class="card-info__form booking__form">
         <div class="card-info__field booking__form__field">
-          <lable for="card-number" class="booking__input-label">卡片號碼：</lable>
-          <input type="text" name="card-number" id="card-number" autocomplete="cc-number" maxlength="19" pattern="[0-9]{13,19}" placeholder="**** **** **** ****" required>
+          <span class="booking__input-label">卡片號碼：</span>
+          <div class="tpfield" id="card-number"></div>
         </div>
         <div class="card-info__field booking__form__field">
-          <lable for="card-expire-time" class="booking__input-label">過期時間： </lable>
-          <input type="email" name="card-expire-time" id="card-expire-time" autocomplete="cc-exp" pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$" placeholder="MM / YY" maxlength="5"" required>
+          <span class="booking__input-label">過期時間： </span>
+          <div class="tpfield" id="card-expiration-date"></div>
         </div>
         <div class="card-info__field booking__form__field">
-          <lable for="cvv" class="booking__input-label">驗證密碼：</lable>
-          <input type="tel" name="cvv" id="cvv" autocomplete="cc-csc" placeholder="CVV" maxlength="4" pattern="[0-9]{3,4}" required>
+          <span class="booking__input-label">驗證密碼：</span>
+          <div class="tpfield" id="card-ccv"></div>
         </div>
       </form>
     </div>
+    
     <div class="separator no-booking"></div>
 
     <div class="booking__total booking__section no-booking">
       <p class="booking__total__price">總價：新台幣 <span></span> 元</p>
-      <button type="button" class="booking__total__confirm-btn">確認訂購並付款</button>
+      <button type="submit" form="orderForm"  class="booking__total__confirm-btn" disabled="true">確認訂購並付款</button>
     </div>
 
   </div>

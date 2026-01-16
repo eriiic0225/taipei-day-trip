@@ -2,7 +2,7 @@
     --primary: #448899;
     --secondary: #666666;
     --bg: #ffffff;
-    --fontfamily: 'Noto Sans TC', Sans-serif;
+    --fontfamily: 'Noto Sans TC', 'Noto Sans CJK TC', 'Source Han Sans TC', sans-serif;
     --max: 1200px;
     --shadow: 0 0 20px #AABBCC;
     --selected-cat: #EEEEEE;

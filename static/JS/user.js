@@ -51,7 +51,7 @@ function showMessage(form, message, isError = false){
 
     messageEl.textContent = message
 
-    isError?messageEl.style.color = "tomato":messageEl.style.color = "cornflowerblue"
+    isError?messageEl.style.color = "tomato" : messageEl.style.color = "cornflowerblue"
 
     messageEl.style.display = "block"
 
@@ -181,7 +181,7 @@ async function checkUserStates(){
             localStorage.removeItem("token")
             return null
         }
-        return result.data
+        return result.data //回傳user的資料
     }catch(error){
         console.error("伺服器錯誤：", error)
         return null

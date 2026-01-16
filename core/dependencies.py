@@ -2,8 +2,8 @@
 # 供路由使用的依賴函數。當路由需要驗證 token 時，直接用這個
 from fastapi import Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from auth.service import decode_access_token
-from auth.schemas import TokenPayload
+from services.user_service import decode_access_token
+from models.user import TokenPayload
 
 bearer_scheme = HTTPBearer(auto_error=False)
 

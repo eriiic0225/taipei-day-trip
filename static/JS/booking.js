@@ -8,7 +8,10 @@ document.addEventListener("DOMContentLoaded", async()=>{
 
     const currentBooking = await authApiCallGet("/api/booking", "GET")
     if (!currentBooking.data) return
+    sessionStorage.setItem("booking-info", JSON.stringify(currentBooking.data))
     renderBookingPageDetail(currentBooking.data)
+    // 預先帶入 user 的資料到contact
+    prefillContactInfo(user)
 });
 
 function renderBookingPageDetail(bookingDetail){
@@ -37,4 +40,9 @@ async function cancelCurrentBooking() {
     }else{
         alert(`操作失敗：${result.message}`)
     }
+}
+
+function prefillContactInfo(user){
+    document.querySelector(".contact__field input[name='name']").value = user.name
+    document.querySelector(".contact__field input[name='email']").value = user.email
 }
