@@ -16,8 +16,11 @@ document.addEventListener("DOMContentLoaded", async()=>{
     const orderNumber = getOrderNumberFromURL()
     const orderInfo = await authApiCallGet(`/api/order/${orderNumber}`, "GET")
     console.log(orderInfo)
-
-    renderOrderDetail(orderInfo.data)
+    if (orderInfo.data.status === 1) {
+        renderOrderDetail(orderInfo.data)
+    }else{
+        location.assign("/booking")
+    }
 });
 
 function renderOrderDetail(data){

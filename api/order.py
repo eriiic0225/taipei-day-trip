@@ -67,12 +67,12 @@ async def create_order_and_payment(
         print(tappay_repsonse)
 
         db_status = 0
-        rec_trade_id = None
+        rec_trade_id = tappay_repsonse.get("rec_trade_id")
 
         # 第三步：根據回應更新資料庫
         if tappay_repsonse.get("status") == 0:
             db_status = 1
-            rec_trade_id = tappay_repsonse.get("rec_trade_id")
+            # rec_trade_id = tappay_repsonse.get("rec_trade_id")
             # 成功時才刪除預約(booking)
             cursor.execute("DELETE FROM booking WHERE user_id=%s AND booking_status='active'",(payload.id,))
         

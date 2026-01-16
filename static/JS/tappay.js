@@ -131,11 +131,12 @@ function onSubmit(event) {
             // 打 orders API (POST)
             const result = await authApiCall("/api/orders", "POST", payload)
             console.log(result)
-            if (result.error){
-                alert(`操作失敗`, result.message)
+            if (result.data.payment.status === 0 || result.error){
+                alert(`付款失敗，請確認卡片資訊並重新嘗試`||`操作失敗：${result.message}`)
                 submitButton.removeAttribute('disabled')
                 return
             }
+            submitButton.removeAttribute('disabled')
             location.assign(`/thankyou?number=${result.data.number}`)
         }catch(error){
             console.error("呼叫 API 發生錯誤:", error)
