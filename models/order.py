@@ -1,15 +1,16 @@
+from __future__ import annotations
 from pydantic import BaseModel, EmailStr, Field
 from typing import Literal
 from models.booking import BookingAttraction
-
-class CreateOrderData(BaseModel):
-    prime: str
-    order: OrderInput
 
 class OrderInput(BaseModel):
     price: int
     trip:Trip
     contact: Contact
+
+class CreateOrderData(BaseModel):
+    prime: str
+    order: OrderInput
 
 class Trip(BaseModel):
     attraction: BookingAttraction
