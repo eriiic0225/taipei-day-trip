@@ -99,9 +99,8 @@ def get_attraction_from_db(id:int, cursor):
     return attraction
 
 def get_categories_from_db(cnx):
-	cursor = None
+	cursor = cnx.cursor()
 	try:
-		cursor = cnx.cursor()
 		cursor.execute(
 			"""SELECT DISTINCT category 
 			FROM attractions 
@@ -110,6 +109,22 @@ def get_categories_from_db(cnx):
 		categories = [category[0] for category in result]
 
 		return categories
+	
+	finally:
+		cursor.close()
+
+def get_mrts_from_db(cnx):
+	cursor = cnx.cursor()
+	try:
+		cursor.execute(
+			"""SELECT mrt, COUNT(*)AS num 
+			FROM attractions 
+			WHERE mrt IS NOT NULL AND mrt !=''
+			GROUP BY mrt ORDER BY num DESC;""")
+			# SQL中判斷 NULL 需要要用 IS NULL 或 IS NOT NULL
+		result = cursor.fetchall()
+		mrts = [mrt[0] for mrt in result]
+		return mrts
 	
 	finally:
 		cursor.close()
