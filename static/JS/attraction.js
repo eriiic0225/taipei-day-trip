@@ -146,6 +146,27 @@ attractionPageInit()
 
 //! week5 範圍
 const bookingForm = document.querySelector(".attraction-page__booking-form")
+
+// === 送出booking請求的函式 ===
+async function sendBookingRequest(){
+    const bookingInfo = new FormData(bookingForm)
+    const bookingDate = bookingInfo.get("book-date")
+    const bookingTime = bookingInfo.get("book-time")
+    const bookingPrice = bookingForm.querySelector('input[name="book-time"]:checked').dataset.price
+    const bookingAttractionId = document.querySelector(".attraction-page__name").dataset.id
+    const payload = {
+        attractionId: bookingAttractionId,
+        date: bookingDate,
+        time: bookingTime,
+        price: bookingPrice
+    }
+    const result = await authApiCall("/api/booking", "POST", payload)
+    if (result.error){
+        throw new Error(result.message)
+    }
+    return true
+}
+
 bookingForm.addEventListener("submit",async(e)=>{
     e.preventDefault()
     const user = await checkUserStates()

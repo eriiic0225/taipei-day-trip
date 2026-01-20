@@ -88,23 +88,19 @@ async def user_login(data:LoginData, cnx=Depends(get_db)):
         is_password_correct = verify_password(password, stored_hashed_pwd)
 
         if not is_password_correct:
-            raise MyCustomError("密碼不正確")
+            return JSONResponse(
+                status_code=400,
+                content={
+                    "error": True,
+                    "message": "密碼不正確"
+                }
+            )
         
         # 比對成功 => 把 user_id, name, email 組成payload，再生成token
         token = create_access_token(user_id, user_name, email)
         print(token)
 
         return Token(token=token)
-    
-    except MyCustomError as e:
-        print(f"❌ 執行失敗: {str(e)}")
-        return JSONResponse(
-            status_code=400,
-            content={
-                "error": True,
-                "message": str(e)
-            }
-        )
     
     except Exception as e:
         print(f"❌ 執行失敗: {str(e)}")
