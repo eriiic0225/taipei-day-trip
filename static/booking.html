@@ -65,7 +65,10 @@
         </div>
         <div class="contact__field booking__form__field">
           <label for="phone" class="booking__input-label">手機號碼：</label>
-          <input type="tel" name="phone" id="phone" required>
+          <input type="tel" pattern="^09\d{8}$" name="phone" id="phone" required
+            oninvalid="this.setCustomValidity('請輸入正確的台灣手機格式（例如：0912345678）')"
+            oninput="this.setCustomValidity('')"
+          >
         </div>
       </form>
       <p class="contact__memo">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</p>
@@ -99,7 +102,9 @@
 
   </div>
 
-
+  <div id="loading-mask" class="loading-mask hidden">
+    <div class="loader"></div>
+  </div>
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="footer__copy-right">COPYRIGHT © 2025 台北一日遊</div>

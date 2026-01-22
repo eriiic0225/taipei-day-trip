@@ -131,7 +131,7 @@ async function attractionPageInit(){
     if (rawData) {
 
         imagesPreload(rawData.data.images)
-            .then((result)=>console.log(`全部圖片預載成功🎊 ,${result}`))
+            .then((result)=>console.log(`全部圖片預載成功🎊`))
             .catch((error)=>console.error(`有圖片預載失敗🫠 ,${error}`))
         
         renderAttractionDetail(rawData.data)
@@ -151,6 +151,10 @@ const bookingForm = document.querySelector(".attraction-page__booking-form")
 async function sendBookingRequest(){
     const bookingInfo = new FormData(bookingForm)
     const bookingDate = bookingInfo.get("book-date")
+    if (!validBookingDate(bookingDate)) {
+        alert("只能預定今天以後的日期！")
+        return false
+    }
     const bookingTime = bookingInfo.get("book-time")
     const bookingPrice = bookingForm.querySelector('input[name="book-time"]:checked').dataset.price
     const bookingAttractionId = document.querySelector(".attraction-page__name").dataset.id
@@ -184,3 +188,14 @@ bookingForm.addEventListener("submit",async(e)=>{
         alert(err.message)
     }
 })
+
+//week 7 新增 - 前端判斷 booking date 使否已過
+function validBookingDate(dateString){
+    // 取得當前時間，並將時間部分歸零，只保留日期
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // 設定為當天午夜 00:00:00
+
+    const bookingDate = new Date(dateString)
+    bookingDate.setHours(0, 0, 0, 0)
+    return bookingDate.getTime() > now.setHours(0, 0, 0, 0);
+}

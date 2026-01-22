@@ -6,12 +6,19 @@ document.addEventListener("DOMContentLoaded", async()=>{
 
     document.querySelector(".booking__user-name").textContent = user.name
 
-    const currentBooking = await authApiCallGet("/api/booking", "GET")
-    if (!currentBooking.data) return
-    sessionStorage.setItem("booking-info", JSON.stringify(currentBooking.data))
-    renderBookingPageDetail(currentBooking.data)
-    // 預先帶入 user 的資料到contact
-    prefillContactInfo(user)
+    try{
+        showLoading()
+        const currentBooking = await authApiCallGet("/api/booking", "GET")
+        if (!currentBooking.data) return
+        sessionStorage.setItem("booking-info", JSON.stringify(currentBooking.data))
+        renderBookingPageDetail(currentBooking.data)
+        // 預先帶入 user 的資料到contact
+        prefillContactInfo(user)
+    }catch(e){
+        console.error(e)
+    }finally{
+        hideLoading()
+    }
 });
 
 function renderBookingPageDetail(bookingDetail){

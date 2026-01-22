@@ -1,6 +1,7 @@
 // ============ API請求 - 資料抓取 ============ 
 async function fetchData(url) {
     try{
+        showLoading()
         const response = await fetch(url, {
             method: "GET"
         })
@@ -17,6 +18,8 @@ async function fetchData(url) {
     } catch (error) {
         console.error("API載入失敗", error)
         return null;  // 失敗時回傳 null
+    } finally {
+        hideLoading()
     }
 }
 
@@ -100,4 +103,16 @@ function ImgPreload(url){
         img.onerror = () => reject({ url, status: 'failed' });
         img.src = url
     })
+}
+
+
+// ======== loading effect ========
+const loadingMask = document.getElementById('loading-mask');
+
+function showLoading() {
+    loadingMask.classList.remove('hidden');
+}
+
+function hideLoading() {
+    loadingMask.classList.add('hidden');
 }

@@ -102,15 +102,16 @@ body {
     font-weight: 700;
 }
 
-.hero__title {
-    font-size: 28px;
-    line-height: 24px;
-    margin-bottom: 15px;
+.hero__subtitle {
+    font-size: 16px;
+}
+
+.search-box {
+    position: relative;
 }
 
     /* 搜尋框本體 */
 .search-box__inner {
-    position: relative;
     display: flex;
     align-items: center;
     height: 46px;
@@ -167,17 +168,28 @@ body {
 }
 
     /* 類別展開 */
-.category-dropdown__container--close{
-    display: none;
+.category-dropdown__container {
+    position: absolute;
+    top: calc(100% + 5px); /* 位於搜尋框下方 5px */
+    left: 0;
+    z-index: 3;
+    
+    /* 動畫屬性：預設為透明、向上偏移、不可見 */
+    opacity: 0;
+    transform: translateY(-10px);
+    visibility: hidden;
+    pointer-events: none; /* 隱藏時不可點擊 */
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
 }
 
-.category-dropdown__container--open {
-    display: block;
+.category-dropdown__container.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
 }
 
 .category-dropdown__menu {
-    position: absolute;
-    translate: 0 5px;
     width: 300px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -185,7 +197,6 @@ body {
     justify-content: center;
     border-radius: 5px;
     box-shadow: var(--shadow);
-    z-index: 3;
 }
 
 .category-dropdown__item {
@@ -305,6 +316,7 @@ body {
     transition: all 0.3s ease;
 }
 
+/* 卡片懸停的效果 */
 .attraction__card:hover {
     filter: 
         brightness(1.1) 

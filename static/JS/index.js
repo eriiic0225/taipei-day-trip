@@ -37,7 +37,7 @@ backBtn.addEventListener("click",()=>{
 // ============ 類別清單展開 ＆ 條件更新 ============ 
 // 點擊按鈕展開/收合
 listSwitch.addEventListener("click", (e)=>{
-    catDrawer.classList.toggle("category-dropdown__container--open")
+    catDrawer.classList.toggle("is-open")
 })
 
 // 點擊分類項目 --->> 更新條件/收回清單
@@ -50,7 +50,7 @@ categoryMenu.addEventListener("click", (e)=>{
         // 更新全域變數
         currentCategory = item.dataset.category;  // 「全部分類」的 data-category=""
 
-        catDrawer.classList.remove("category-dropdown__container--open")
+        catDrawer.classList.remove("is-open")
 
         console.log("分類已更新，目前選取類別: ", currentCategory)
     }
