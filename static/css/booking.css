@@ -20,53 +20,6 @@ body {
     flex-direction: column;
 }
 
-/* ===== navbar區域 ===== */
-.navbar {
-    background-color: var(--bg);
-    height: 54px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: sticky;
-    top: 0;
-    z-index: 10000;
-    border-bottom: 1px solid rgba(232, 232, 232, 1);
-}
-
-.container {
-    margin-inline: auto;
-    width: 100%;
-    max-width: var(--max);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 9px 0 10px;
-}
-
-.navbar__logo {
-    color: var(--primary);
-    font-size: 30px;
-    font-weight: 700;
-    white-space: nowrap;
-    letter-spacing: 0;
-    line-height: 34px;
-}
-
-.navbar__list {
-    display: flex;
-}
-
-.navbar__items {
-    font-size: 16px;
-    color: var(--secondary);
-    padding-inline: 10px;
-}
-
-.narbar__link {
-    display: inline-block;
-    white-space: nowrap;
-}
-
 /* ===== section區域 ===== */
 .booking__warp {
     margin-inline: auto;

@@ -17,61 +17,6 @@ body {
     flex-direction: column;
 }
 
-/* ===== navbar區域 ===== */
-.navbar {
-    background-color: var(--bg);
-    height: 54px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: sticky;
-    top: 0;
-    z-index: 10000;
-    border-bottom: 1px solid rgba(232, 232, 232, 1);
-}
-
-.container {
-    margin-inline: auto;
-    width: 100%;
-    max-width: var(--max);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 9px 0 10px;
-}
-
-.navbar__logo {
-    color: var(--primary);
-    font-size: 30px;
-    font-weight: 700;
-    white-space: nowrap;
-    letter-spacing: 0;
-    line-height: 34px;
-}
-
-.navbar__list {
-    display: flex;
-}
-
-.navbar__items {
-    font-size: 16px;
-    color: var(--secondary);
-    padding-inline: 5px;
-}
-
-.navbar__link {
-    display: inline-block;
-    padding: 5px;
-    white-space: nowrap;
-    transition: background 0.3s ease;
-    border-radius: 4px;
-}
-
-.navbar__link:hover {
-    text-decoration: underline ;
-    background-color: rgb(194, 220, 247);
-}
-
 /* ===== 首頁 -- Hero 區域 ===== */
     /* 背景圖 */
 .hero {

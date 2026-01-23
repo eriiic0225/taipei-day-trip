@@ -207,7 +207,8 @@ async function initUserFeatures() {
     BookingPageRedirctCheck() // week 5 
 }
 
-document.addEventListener("DOMContentLoaded", initUserFeatures);
+// 監聽 navbar 是否已經就緒
+document.addEventListener("navbarLoaded", initUserFeatures);
 
 //! week 5 - booking跳轉邏輯函式包裝
 function BookingPageRedirctCheck(){
