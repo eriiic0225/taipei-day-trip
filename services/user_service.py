@@ -169,3 +169,20 @@ def update_user_fields(cnx, email, update_data):
     finally:
         if cursor:
             cursor.close()
+
+
+def get_user_info(cnx, user_id:int)->str:
+    cursor = None
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        sql = "SElECT * FROM user where id=%s"
+        cursor.execute(sql,(user_id,))
+
+        return cursor.fetchone()
+
+    except Exception as e:
+        print(f"抓取使用者資料失敗: {e}")
+    
+    finally:
+        if cursor:
+            cursor.close()

@@ -44,24 +44,30 @@ async function apiCall(url, method, payload){
 }
 
 // ==== 需要驗證身份的 API call (with body) ====
-async function authApiCall(url, method, payload){
-    const token = localStorage.getItem("token")
-    if (!token) return null
-    const response = await fetch(url,{
+async function authApiCall(url, method, payload) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.error("缺少 Token");
+        return null;
+    }
+
+    const response = await fetch(url, {
         method,
-        headers:{
+        headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
         },
         body: JSON.stringify(payload)
-    })
+    });
 
-    const result = response.json()
-    if (result.error){
-        throw new Error(result.message)
+    const result = await response.json();
+
+    // 如果後端回傳 error: true，在這裡統一拋出錯誤，讓外面的 try...catch 捕捉
+    if (result.error) {
+        throw new Error(result.message);
     }
 
-    return result
+    return result;
 }
 
 // ==== 需要驗證身份的 API call (GET or Delete/不能有body) ====
@@ -73,10 +79,10 @@ async function authApiCallGet(url, method){
         headers:{
             "Content-Type": "application/json",
             "Authorization": "Bearer " + token
-        },
+        }
     })
 
-    const result = response.json()
+    const result = await response.json()
     if (result.error){
         throw new Error(result.message)
     }

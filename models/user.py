@@ -1,7 +1,7 @@
 # 數據結構
 # 用 Pydantic 定義 JWT payload 和回應格式
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator, ConfigDict
 from typing import Optional
 
 class CreateUserData(BaseModel):
@@ -33,6 +33,7 @@ class Token(BaseModel):
 
 # 用戶基本資訊（登入成功或取得用戶資訊時回傳）# 繼承TokenPayload相同的屬性
 class UserResponseData(TokenPayload):
+    model_config = ConfigDict(from_attributes=True)
     avatar: Optional[str] = None
 
 class UserResponse(BaseModel):

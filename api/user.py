@@ -112,12 +112,18 @@ async def user_login(data:LoginData, cnx=Depends(get_db)):
 # ========== 取得當前登入使用者的資訊 =========
 @router.get("/auth")
 async def get_current_user(
-    payload:Optional[TokenPayload]=Depends(verify_token)):
+    payload:Optional[TokenPayload]=Depends(verify_token),
+    cnx=Depends(get_db)):
 
     if payload is None:
         return {"data": None}
     
-    user_data = UserResponseData(id=payload.id, name=payload.name, email=payload.email)
+    result = get_user_by_email(cnx, payload.email)
+
+    if not result: #避免當 result 是 None 時，model_validate 噴出程式錯誤（Exception）
+        return {"data": None, "message": "找不到該使用者資料"}
+    
+    user_data = UserResponseData.model_validate(result)
 
     return {
         "data":user_data
@@ -170,7 +176,7 @@ async def api_update_user_info(data:UserUpdateInput, payload:TokenPayload=Depend
         if not data.password: #如果沒有輸入舊的密碼
             return {"error": True, "message": "修改密碼需輸入舊密碼"}
         
-        current_user = get_current_user(cnx, payload.email)
+        current_user = get_user_by_email(cnx, payload.email)
 
         # 比對舊密碼
         is_valid = verify_password(data.password, current_user["password"])
