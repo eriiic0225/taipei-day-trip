@@ -191,12 +191,33 @@ async function checkUserStates(){
 
 // ==== 確認所有頁面右上角的登入/登出的顯示狀態 ====
 async function RenderLoginStatus(){
-    const user = await checkUserStates() 
+    const user = await checkUserStates(); 
+    // 取得新的狀態區塊元素
+    const loggedOutNav = document.querySelector('[data-nav-status="logged-out"]');
+    const loggedInNav = document.querySelector('[data-nav-status="logged-in"]');
+    
+    // 取得已登入狀態下的使用者名稱和頭像顯示元素
+    const userNameDisplay = loggedInNav ? loggedInNav.querySelector('.user-profile-button__name') : null;
+    const userAvatarDisplay = loggedInNav ? loggedInNav.querySelector('.user-profile-button__avatar') : null;
+
     if (user){
-        //如果登入成功 => 渲染 - 從「登入註冊」改「登出系統」
-        const loginStates = document.querySelector(".navbar_login-states")
-        loginStates.innerHTML = 
-            `<a href="#" class="navbar__link" onclick="logout()">登出系統</a>`
+        // 如果登入成功：隱藏「未登入」狀態，顯示「已登入」狀態
+        if (loggedOutNav) loggedOutNav.style.display = 'none';
+        if (loggedInNav) {
+            loggedInNav.style.display = 'flex'; // 使用 flex 保持排版，如果你在 CSS 中設定了 flex
+            // 填充使用者名稱
+            if (userNameDisplay) userNameDisplay.textContent = user.name;
+            // 填充使用者頭像 (如果 user.avatar 為空，則使用預設圖片)
+            if (userAvatarDisplay) userAvatarDisplay.src = user.avatar || '/static/img/BMO.jpg';
+            // 這裡不需要額外處理 popover 的顯示/隱藏，它會由點擊按鈕自動觸發
+        }
+    } else {
+        // 如果未登入：顯示「未登入」狀態，隱藏「已登入」狀態
+        if (loggedOutNav) loggedOutNav.style.display = 'flex';
+        if (loggedInNav) loggedInNav.style.display = 'none';
+        // 同時確保 popover 選單如果打開了也關閉
+        const userMenuPopover = document.getElementById('user-menu-popover');
+        if (userMenuPopover && userMenuPopover.open) userMenuPopover.hidePopover(); // hidePopover 是 popover API 的方法
     }
 }
 

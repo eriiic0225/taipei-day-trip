@@ -1,13 +1,31 @@
 <nav class="navbar">
     <div class="container">
-      <div class="navbar__logo"><a href="/">台北一日遊</a></div>
-      <ul class="navbar__list">
-        <li class="navbar__items">
-          <a href="/booking" class="navbar__link" data-booking>預定行程</a>
-        </li>
-        <li class="navbar__items navbar_login-states">
-          <a href="#" class="navbar__link" data-dialog-trigger="true">登入/註冊</a>
-        </li>
-      </ul>
+        <div class="navbar__logo"><a href="/">台北一日遊</a></div>
+        <ul class="navbar__list">
+            <li class="navbar__items">
+                <a href="/booking" class="navbar__link" data-booking>預定行程</a>
+            </li>
+
+            <!-- 未登入時顯示 -->
+            <li class="navbar__items" data-nav-status="logged-out">
+                <a href="#" class="navbar__link" data-dialog-trigger="true">登入/註冊</a>
+            </li>
+
+            <!-- 已登入時顯示 (預設隱藏) -->
+            <li class="navbar__items" data-nav-status="logged-in" style="display: none;">
+                <button type="button" id="user-profile-button" class="user-profile-button" popovertarget="user-menu-popover">
+                    <span class="user-profile-button__name"></span>
+                    <img class="user-profile-button__avatar" src="/static/img/icon_member.svg" alt="會員頭像">
+                </button>
+            </li>
+        </ul>
     </div>
 </nav>
+
+<!-- Popover 選單本身，放在 nav 外部，由瀏覽器管理 -->
+<div id="user-menu-popover" class="user-menu" anchor="user-profile-button" popover>
+    <ul class="user-menu__list">
+        <li class="user-menu__item"><a href="/member">會員中心</a></li>
+        <li class="user-menu__item"><a href="#" onclick="logout()">登出系統</a></li>
+    </ul>
+</div>
