@@ -70,6 +70,10 @@ async def booking(request: Request):
 @app.get("/thankyou", include_in_schema=False)
 async def thankyou(request: Request):
 	return FileResponse("./static/thankyou.html", media_type="text/html")
+# 新增：會員頁面
+@app.get("/member", include_in_schema=False)
+async def thankyou(request: Request):
+	return FileResponse("./static/member.html", media_type="text/html")
 
 
 # 包含路由器

@@ -15,21 +15,39 @@ def get_hashed_password(password: str) -> bytes:
     #透過hashpw()把兩個位元組(密碼本身和鹽值)透過演算法打散混合
 
 
-def get_user_by_email(cursor, email:str):
+def get_user_by_email(cnx, email:str):
     """根據 Email 從資料庫取得使用者資料"""
-    cursor.execute("SELECT * FROM user WHERE email=%s",(email,))
-    return cursor.fetchone()
+    cursor = None
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM user WHERE email=%s",(email,))
+        return cursor.fetchone()
+    
+    except Exception as e:
+        print(f"資料庫出錯: {str(e)}")
+
+    finally:
+        if cursor:
+            cursor.close()
 
 
 def create_user_in_db(cnx, name, email, hashed_password):
-    """執行註冊 SQL"""
-    cursor = cnx.cursor()
-    cursor.execute("""
-        INSERT INTO user(name, email, password)
-        VALUES(%s, %s, %s)
-    """,(name, email, hashed_password))
-    cnx.commit()
-    cursor.close()
+    cursor = None
+    try:
+        cursor = cnx.cursor()
+        cursor.execute("""
+            INSERT INTO user(name, email, password)
+            VALUES(%s, %s, %s)
+        """,(name, email, hashed_password))
+        cnx.commit()
+
+    except Exception as e:
+        cnx.rollback()
+        print (f"註冊失敗: {e}")
+
+    finally:
+        if cursor:
+            cursor.close()
 
 
 def verify_password(plain_password: str, hashed_password)-> bool:
@@ -105,3 +123,49 @@ def decode_access_token(token: str) -> Optional[TokenPayload]:
     except jwt.InvalidTokenError:
         print("Token 無效")
         return None
+    
+
+def update_db_user_avatar(cnx, user_id:int, file_path:str):
+    cursor = None
+    try:
+        cursor = cnx.cursor()
+        sql = "UPDATE user SET avatar = %s WHERE id = %s"
+        cursor.execute(sql,(file_path, user_id))
+
+        cnx.commit()
+
+    except Exception as e:
+        cnx.rollback()
+        print(f"資料庫更新頭貼路徑失敗: {str(e)}")
+
+    finally:
+        if cursor:
+            cursor.close()
+
+
+def update_user_fields(cnx, email, update_data):
+    cursor = None
+    try:
+        cursor = cnx.cursor()
+        
+        # 動態組成 SQL 語法
+        # 例如: "UPDATE user SET name = %s, password = %s WHERE email = %s"
+        columns = [f"{key} = %s" for key in update_data.keys()]
+        sql = f"UPDATE user SET {', '.join(columns)} WHERE email = %s"
+        
+        # 組成對應的數值清單
+        values = list(update_data.values())
+        values.append(email)
+        
+        cursor.execute(sql, tuple(values))
+        cnx.commit()
+        return True
+        
+    except Exception as e:
+        cnx.rollback()
+        print(f"更新使用者資料失敗: {e}")
+        return False
+    
+    finally:
+        if cursor:
+            cursor.close()

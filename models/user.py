@@ -33,7 +33,12 @@ class Token(BaseModel):
 
 # 用戶基本資訊（登入成功或取得用戶資訊時回傳）# 繼承TokenPayload相同的屬性
 class UserResponseData(TokenPayload):
-    pass
+    avatar: Optional[str] = None
 
 class UserResponse(BaseModel):
     data: Optional[UserResponseData] = None
+
+class UserUpdateInput(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, max_length=50)
+    password: Optional[str] = Field(None, min_length=1, max_length=20)
+    new_password: Optional[str] = Field(None, min_length=1, max_length=20)

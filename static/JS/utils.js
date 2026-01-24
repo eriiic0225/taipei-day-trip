@@ -1,3 +1,6 @@
+// 預設的大頭貼圖片
+const defaultAvatar = "/static/img/BMO.jpg";
+
 // ============ API請求 - 資料抓取 ============ 
 async function fetchData(url) {
     try{

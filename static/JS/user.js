@@ -208,7 +208,7 @@ async function RenderLoginStatus(){
             // 填充使用者名稱
             if (userNameDisplay) userNameDisplay.textContent = user.name;
             // 填充使用者頭像 (如果 user.avatar 為空，則使用預設圖片)
-            if (userAvatarDisplay) userAvatarDisplay.src = user.avatar || '/static/img/BMO.jpg';
+            if (userAvatarDisplay) userAvatarDisplay.src = user.avatar || defaultAvatar;
             // 這裡不需要額外處理 popover 的顯示/隱藏，它會由點擊按鈕自動觸發
         }
     } else {
