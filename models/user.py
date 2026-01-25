@@ -36,6 +36,23 @@ class UserResponseData(TokenPayload):
     model_config = ConfigDict(from_attributes=True)
     avatar: Optional[str] = None
 
+    @field_validator("avatar")
+    @classmethod
+    def format_avatar_url(cls, v: Optional[str]) -> Optional[str]:
+        # 1. 如果資料庫裡沒資料 (None)，就直接回傳 None
+        if not v:
+            return None
+        
+        # 2. 如果路徑已經是 http 開頭（例如未來接第三方儲存），就不動它
+        if v.startswith(("http://", "https://")):
+            return v
+            
+        # 3. 檢查開頭有沒有斜線，沒有就補上
+        if not v.startswith("/"):
+            return f"/{v}"
+            
+        return v
+
 class UserResponse(BaseModel):
     data: Optional[UserResponseData] = None
 

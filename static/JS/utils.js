@@ -116,12 +116,17 @@ function ImgPreload(url){
 
 
 // ======== loading effect ========
-const loadingMask = document.getElementById('loading-mask');
-
 function showLoading() {
-    loadingMask.classList.remove('hidden');
+    const loadingMask = document.getElementById('loading-mask');
+    // 並且加上一個判斷，確保在沒有 loading-mask 的頁面也不會報錯
+    if (loadingMask) {
+        loadingMask.classList.remove('hidden');
+    }
 }
 
 function hideLoading() {
-    loadingMask.classList.add('hidden');
+    const loadingMask = document.getElementById('loading-mask');
+    if (loadingMask) {
+        loadingMask.classList.add('hidden');
+    }
 }
