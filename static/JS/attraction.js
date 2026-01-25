@@ -126,7 +126,7 @@ function initIndicatorEventListener(){
 
 // 初始化渲染及事件監聽代理綁定
 async function attractionPageInit(){
-    const rawData = await fetchData(`/api/attraction/${getAttractionIdFromURL()}`)
+    const rawData = await fetchDataWithLoading(`/api/attraction/${getAttractionIdFromURL()}`)
 
     if (rawData) {
 

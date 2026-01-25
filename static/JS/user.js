@@ -18,32 +18,50 @@ async function loadAuthDialog() {
     }
 }
 
-// ============ Pop Up Dialog 開關監聽 ============
-document.addEventListener("click", (e)=>{
-    // 打開 Dialog(預設Login)
-    if (e.target.matches("[data-dialog-trigger]")){
-        e.preventDefault()
-        dialogs.login.showModal()
-    }
+function initGlobalEventListeners(){
+    // ============ Pop Up Dialog 開關監聽 ============
+    document.addEventListener("click", (e)=>{
+        // 打開 Dialog(預設Login)
+        if (e.target.matches("[data-dialog-trigger]")){
+            e.preventDefault()
+            dialogs.login.showModal()
+        }
+    
+        // 登入/註冊切換
+        if (e.target.matches(".dialog__switch")){
+            e.preventDefault()
+    
+            const currentDialog = e.target.closest(".dialog")
+            const targetDialog = 
+                currentDialog.classList.contains("login-dialog")?
+                dialogs.signup : dialogs.login
+    
+            currentDialog.close()
+            targetDialog.showModal()
+        }
+    
+        // 按 ❌ 關閉 dialog
+        if (e.target.closest(".dialog__close-btn")){
+            e.target.closest(".dialog").close()
+        }
+    })
 
-    // 登入/註冊切換
-    if (e.target.matches(".dialog__switch")){
-        e.preventDefault()
+    // ==== 監聽登入＆註冊的form提交 ====
+    document.addEventListener("submit", async(e)=>{
+        if (e.target.matches(".dialog__form")){
+            e.preventDefault()
+            let form = e.target
+            const formType = form.dataset.form
 
-        const currentDialog = e.target.closest(".dialog")
-        const targetDialog = 
-            currentDialog.classList.contains("login-dialog")?
-            dialogs.signup : dialogs.login
+            if (formType === "login"){
+                await login(form)
+            } else if (formType === "signup"){
+                await signUp(form)
+            }
+        }
+    })
+}
 
-        currentDialog.close()
-        targetDialog.showModal()
-    }
-
-    // 按 ❌ 關閉 dialog
-    if (e.target.closest(".dialog__close-btn")){
-        e.target.closest(".dialog").close()
-    }
-})
 
 // ==== 顯示錯誤訊息(給登入/註冊使用) ====
 function showMessage(form, message, isError = false){
@@ -134,21 +152,6 @@ async function signUp(form) {
     }
 }
 
-// ==== 監聽登入＆註冊的form提交 ====
-document.addEventListener("submit", async(e)=>{
-    if (e.target.matches(".dialog__form")){
-        e.preventDefault()
-        let form = e.target
-        const formType = form.dataset.form
-
-        if (formType === "login"){
-            await login(form)
-        } else if (formType === "signup"){
-            await signUp(form)
-        }
-    }
-})
-
 
 // ==== 登出 ====
 function logout(){
@@ -226,9 +229,12 @@ async function initUserFeatures() {
     await loadAuthDialog()
     await RenderLoginStatus()
     BookingPageRedirctCheck() // week 5 
+    // 【新增】在所有元件都載入完成後，才啟動全域事件監聽(不然會報錯)
+    initGlobalEventListeners() 
 }
 
 // 監聽 navbar 是否已經就緒
+// navbar.js 會在 navbar 載入後拋出 navbarLoaded 的事件
 document.addEventListener("navbarLoaded", initUserFeatures);
 
 //! week 5 - booking跳轉邏輯函式包裝
