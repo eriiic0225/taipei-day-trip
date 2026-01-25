@@ -142,6 +142,7 @@ async function updateUserEventlistener(){
                 showUpdateMessage('資料更新成功！', 'green');
                 user = await checkUserStates();
                 populateProfileData(user)
+                document.querySelector('.user-profile-button__name').textContent = user.name
             }else{
                 showUpdateMessage(result.message || '更新失敗', 'red');
             }
