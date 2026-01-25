@@ -50,8 +50,23 @@ async def create_order_and_payment(
         return JSONResponse(status_code=500, content={"error": True, "message": "伺服器錯誤"})
     
 
+
+@router.get("/order/history")
+async def api_get_order_history(cnx=Depends(get_db), payload:TokenPayload=Depends(verify_token)):
+    if payload is None:
+        return JSONResponse(status_code=403,content={"error": True,"message": "未登入系統，拒絕存取"})
+    
+    result = get_user_orders(payload.id, cnx)
+    print(result)
+
+    if result is None:
+        return JSONResponse(status_code=500, content={"error": True, "message": "伺服器內部錯誤"})
+
+    return result
+
+
 @router.get("/order/{orderNumber}")
-async def get_order(
+async def api_get_order(
     orderNumber:str, 
     cnx=Depends(get_db),
     payload:Optional[TokenPayload]=Depends(verify_token)):

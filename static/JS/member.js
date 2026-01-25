@@ -42,15 +42,55 @@ async function fetchAndDisplayOrders() {
     const orderListContainer = document.getElementById('order-history-list');
     if (!orderListContainer) return;
 
-    // TODO: 未來將在這裡呼叫 API (例如 authApiCallGet('/api/orders')) 來取得真實訂單資料
-    
-    // 目前，我們先顯示一個預設訊息
-    orderListContainer.innerHTML = '<p>目前沒有歷史訂單紀錄。</p>';
-    
-    // 未來取得資料後的渲染邏輯會寫在這裡...
+    try {
+        // 使用 authApiCallGet 呼叫後端 API
+        const result = await authApiCallGet('/api/order/history', 'GET');
+
+        // 檢查是否有訂單資料
+        if (result && result.data && result.data.length > 0) {
+            orderListContainer.innerHTML = ''; // 清空「沒有紀錄」的訊息
+
+            // 遍歷每一筆訂單並產生對應的 HTML
+            result.data.forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = 'order-card';
+                
+                // 轉換時間顯示
+                const timeText = order.trip.time === 'morning' ? '上半天' : '下半天';
+                // 轉換訂單狀態
+                const statusText = order.status === 1 ? '已付款成功' : '付款失敗或未完成';
+
+                // 產生訂單卡片的 HTML 結構
+                orderCard.innerHTML = `
+                    <div class="order-card__image">
+                        <a href="/attraction/${order.trip.attraction.id}">
+                            <img src="${order.trip.attraction.image}" alt="${order.trip.attraction.name}">
+                        </a>
+                    </div>
+                    <div class="order-card__details">
+                        <div class="order-card__number">訂單編號：${order.number}</div>
+                        <div class="order-card__info">
+                            <p><strong>景點名稱：</strong> ${order.trip.attraction.name}</p>
+                            <p><strong>預定日期：</strong> ${order.trip.date}</p>
+                            <p><strong>預定時間：</strong> ${timeText}</p>
+                            <p><strong>訂單總額：</strong> 新台幣 ${order.price} 元</p>
+                            <p><strong>付款狀態：</strong> ${statusText}</p>
+                        </div>
+                    </div>
+                `;
+                orderListContainer.appendChild(orderCard);
+            });
+        } else {
+            // 如果沒有訂單，則顯示「沒有歷史訂單紀錄」
+            orderListContainer.innerHTML = '<p>目前沒有歷史訂單紀錄。</p>';
+        }
+    } catch (error) {
+        console.error("無法載入歷史訂單:", error);
+        orderListContainer.innerHTML = '<p>無法載入訂單紀錄，請稍後再試。</p>';
+    }
 }
 
-// TODO: 為「編輯資料」和「更換頭像」的按鈕加上事件監聽器，以觸發對應的表單或彈出視窗
+
 async function initAvatarEventlistener() {
     // ==== 頭像上傳邏輯 ====
     const avatarEditButton = document.querySelector('.avatar-edit-button');
