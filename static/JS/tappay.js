@@ -121,9 +121,9 @@ function onSubmit(event) {
                     "time": bookingInfo.time
                 },
                 "contact": {
-                    "name": document.querySelector(".contact__field input[name='name']").value,
-                    "email": document.querySelector(".contact__field input[name='email']").value,
-                    "phone": document.querySelector(".contact__field input[name='phone']").value
+                    "name": document.querySelector(".contact__field input[name='name']").value.trim(),
+                    "email": document.querySelector(".contact__field input[name='email']").value.trim(),
+                    "phone": document.querySelector(".contact__field input[name='phone']").value.trim()
                 }
             }
         }

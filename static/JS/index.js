@@ -37,7 +37,7 @@ backBtn.addEventListener("click",()=>{
 // ============ 類別清單展開 ＆ 條件更新 ============ 
 // 點擊按鈕展開/收合
 listSwitch.addEventListener("click", (e)=>{
-    catDrawer.classList.toggle("category-dropdown__container--open")
+    catDrawer.classList.toggle("is-open")
 })
 
 // 點擊分類項目 --->> 更新條件/收回清單
@@ -50,7 +50,7 @@ categoryMenu.addEventListener("click", (e)=>{
         // 更新全域變數
         currentCategory = item.dataset.category;  // 「全部分類」的 data-category=""
 
-        catDrawer.classList.remove("category-dropdown__container--open")
+        catDrawer.classList.remove("is-open")
 
         console.log("分類已更新，目前選取類別: ", currentCategory)
     }
@@ -171,9 +171,9 @@ function renderMrts(mrts){
 async function init() {
     // 改為並行發送三個請求
     const [attractionsResult, catResult, mrtResult] = await Promise.all([
-        fetchData('/api/attractions'),
-        fetchData('/api/categories'),
-        fetchData('/api/mrts')
+        fetchDataWithLoading('/api/attractions'),
+        fetchDataWithLoading('/api/categories'),
+        fetchDataWithLoading('/api/mrts')
     ])
 
     if (attractionsResult) {
@@ -227,7 +227,7 @@ async function newSearch(){
     if (currentCategory) url += `&category=${currentCategory}`
     if (currentKeyword) url += `&keyword=${currentKeyword}`
 
-    const result = await fetchData(url)
+    const result = await fetchDataWithLoading(url)
     if (result?.data?.length > 0) {
         renderCards(result.data) // 渲染搜尋到的結果
         nextPage = result.nextPage // 在全域紀錄是否有下一頁

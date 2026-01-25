@@ -1,4 +1,4 @@
-# 存放 JWT 的所有常數設定
+# 存放所有常數設定
 
 import os
 from datetime import timedelta
@@ -18,7 +18,7 @@ if not JWT_SECRET_KEY:
         "錯誤： .env 未設定 JWT_SECRET_KEY"
     )
 
-# 取的 Tappay Partner Key
+# 取得 Tappay Partner Key
 PARTNER_KEY = os.getenv("PARTNER_KEY")
 
 if not PARTNER_KEY:

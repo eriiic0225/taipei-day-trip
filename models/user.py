@@ -1,13 +1,18 @@
 # 數據結構
 # 用 Pydantic 定義 JWT payload 和回應格式
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator, ConfigDict
 from typing import Optional
 
 class CreateUserData(BaseModel):
     name: str = Field(..., min_length=1, max_length=50)
     email: EmailStr  # 自動驗證郵箱格式
-    password: str
+    password: str = Field(..., min_length=1) # 至少不能是空的
+
+    @field_validator('email', mode='before') # 在驗證格式前進行處理
+    @classmethod
+    def normalize_email(cls, v:str):
+        return v.lower().strip() # 轉小寫去空白(前端也有做但就以防萬一)
 
 class LoginData(BaseModel):
     email: EmailStr
@@ -26,11 +31,32 @@ class Token(BaseModel):
     token: str # 實際的 JWT token 字串
     # token_type: str = "bearer" #告知前端 token 的類型（預設值 "bearer"）
 
-# 用戶基本資訊（登入成功或取得用戶資訊時回傳）
-class UserResponseData(BaseModel):
-    id: int
-    name: str
-    email: str  
+# 用戶基本資訊（登入成功或取得用戶資訊時回傳）# 繼承TokenPayload相同的屬性
+class UserResponseData(TokenPayload):
+    model_config = ConfigDict(from_attributes=True)
+    avatar: Optional[str] = None
+
+    @field_validator("avatar")
+    @classmethod
+    def format_avatar_url(cls, v: Optional[str]) -> Optional[str]:
+        # 1. 如果資料庫裡沒資料 (None)，就直接回傳 None
+        if not v:
+            return None
+        
+        # 2. 如果路徑已經是 http 開頭（例如未來接第三方儲存），就不動它
+        if v.startswith(("http://", "https://")):
+            return v
+            
+        # 3. 檢查開頭有沒有斜線，沒有就補上
+        if not v.startswith("/"):
+            return f"/{v}"
+            
+        return v
 
 class UserResponse(BaseModel):
     data: Optional[UserResponseData] = None
+
+class UserUpdateInput(BaseModel):
+    name: Optional[str] = Field(None, min_length=1, max_length=50)
+    password: Optional[str] = Field(None, min_length=1, max_length=20)
+    new_password: Optional[str] = Field(None, min_length=1, max_length=20)

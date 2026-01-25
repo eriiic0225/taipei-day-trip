@@ -6,20 +6,27 @@ function getOrderNumberFromURL(){
 }
 
 document.addEventListener("DOMContentLoaded", async()=>{
-    const user = await checkUserStates()
-    if (!user){
-        window.location.assign("/")
-    }
-
-    document.querySelector(".order__user-name").textContent = user.name
-
-    const orderNumber = getOrderNumberFromURL()
-    const orderInfo = await authApiCallGet(`/api/order/${orderNumber}`, "GET")
-    console.log(orderInfo)
-    if (orderInfo.data.status === 1) {
-        renderOrderDetail(orderInfo.data)
-    }else{
-        location.assign("/booking")
+    try{
+        showLoading();
+        const user = await checkUserStates()
+        if (!user){
+            window.location.assign("/")
+        }
+    
+        document.querySelector(".order__user-name").textContent = user.name
+    
+        const orderNumber = getOrderNumberFromURL()
+        const orderInfo = await authApiCallGet(`/api/order/${orderNumber}`, "GET")
+        console.log(orderInfo)
+        if (orderInfo.data.status === 1) {
+            renderOrderDetail(orderInfo.data)
+        }else{
+            location.assign("/booking")
+        }
+    }catch(error){
+        console.error(error)
+    }finally{
+        hideLoading();
     }
 });
 

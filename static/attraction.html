@@ -6,26 +6,15 @@
   <title>台北一日遊</title>
   <link rel="stylesheet" href="/static/css/reset.css">
   <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/dialog.css">
+  <link rel="stylesheet" href="/static/css/navbar.css">
   <script src="/static/JS/utils.js" defer></script>
+  <script src="/static/JS/navbar.js" defer></script>
   <script src="/static/JS/user.js" defer></script>
   <script src="/static/JS/attraction.js" defer></script>
 </head>
 <body>
-
-  <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
-    <div class="container">
-      <div class="navbar__logo"><a href="/">台北一日遊</a></div>
-      <ul class="navbar__list">
-        <li class="navbar__items">
-          <a href="/booking" class="navbar__link" data-booking>預定行程</a>
-        </li>
-        <li class="navbar__items navbar_login-states">
-          <a href="#" class="navbar__link" data-dialog-trigger="true">登入/註冊</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <div id="navbar-placeholder"></div>
 
   <!-- ===== 圖片與預定表單 ===== -->
   <section class="attraction-page__top">
@@ -57,7 +46,7 @@
           <p>以此景點為中心的一日行程，帶您探索城市角落故事</p>
           <div class="attraction-page__booking-date">
             <label class="attraction-page__selete" for="select-date">選擇日期：</label>
-            <input id="select-date" type="date" name="book-date" aria-label="選擇日期">
+            <input id="select-date" type="date" name="book-date" aria-label="選擇日期" lang="en-US">
           </div>
           <div class="attraction-page__booking-time">
             <span class="attraction-page__selete">選擇時間：</span>
@@ -103,7 +92,9 @@
     </div>
   </section>
 
-
+  <div id="loading-mask" class="loading-mask hidden">
+    <div class="loader"></div>
+  </div>
   <!-- ===== FOOTER ===== -->
   <footer class="footer__copy-right">
     COPYRIGHT © 2025 台北一日遊

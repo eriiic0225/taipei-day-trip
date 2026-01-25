@@ -1,0 +1,137 @@
+/* ===== navbar區域 ===== */
+.navbar {
+    background-color: var(--bg);
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    border-bottom: 1px solid rgba(232, 232, 232, 1);
+}
+
+.container {
+    margin-inline: auto;
+    width: 100%;
+    max-width: var(--max);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 9px 0 10px;
+}
+
+.navbar__logo {
+    color: var(--primary);
+    font-size: 30px;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: 0;
+    line-height: 34px;
+}
+
+.navbar__list {
+    display: flex;
+    align-items: center;
+}
+
+.navbar__items {
+    font-size: 16px;
+    color: var(--secondary);
+    padding-left: 3px;
+}
+
+.navbar__link {
+    display: block;
+    padding: 6.5px 8px;
+    white-space: nowrap;
+    transition: background 0.3s ease;
+    border-radius: 4px;
+    display: block;
+}
+
+.navbar__link:hover {
+    background-color: #f0f0f0;
+}
+
+/* ===== User Menu (Logged-in State) ===== */
+
+/* 「使用者名稱+頭像」的觸發按鈕 */
+.user-profile-button {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 名稱與頭像之間的間距 */
+    
+    /* 重設按鈕預設樣式 */
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    /* 增加圓角與內距，讓點擊範圍更舒適 */
+    border-radius: 4px;
+    padding: 2px 8px;
+    transition: background-color 0.2s ease;
+}
+
+/* 滑鼠懸停時的效果 */
+.user-profile-button:hover {
+    background-color: #f0f0f0; /* 一個淡灰色背景 */
+}
+
+/* 使用者名稱 */
+.user-profile-button__name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--secondary);
+}
+
+/* 使用者頭像 */
+.user-profile-button__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd; /* 淺色邊框 */
+}
+
+
+/* Popover 選單本身的樣式 */
+.user-menu {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 8px; /* 讓選單與按鈕之間有一點間距 */
+    padding: 8px 0;
+    width: 160px;
+    background-color: #fff;
+
+    /* 用 anchor定位 user-profile 按鈕 */
+    inset: unset;
+    top: anchor(bottom);
+    right: anchor(right);
+    transform: translateY(5px);
+}
+
+/* popover 預設會有一個半透明的 backdrop 遮罩，我們把它設為透明 */
+.user-menu::backdrop {
+    background-color: transparent;
+}
+
+/* 選單內的 ul */
+.user-menu__list {
+    list-style: none; /* 移除項目符號 */
+}
+
+/* 選單內的項目 */
+.user-menu__item a {
+    display: block; /* 讓整個區域都能點擊 */
+    padding: 10px 16px;
+    color: var(--secondary);
+    text-decoration: none;
+    font-size: 16px;
+}
+
+/* 選單內項目的懸停效果 */
+.user-menu__item a:hover {
+    background-color: #f0f0f0;
+}

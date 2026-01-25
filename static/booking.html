@@ -6,7 +6,10 @@
   <title>台北一日遊</title>
   <link rel="stylesheet" href="/static/css/reset.css">
   <link rel="stylesheet" href="/static/css/booking.css">
-  <script src="/static/JS/utils.js" async></script>
+  <link rel="stylesheet" href="/static/css/dialog.css">
+  <link rel="stylesheet" href="/static/css/navbar.css">
+  <script src="/static/JS/utils.js" defer></script>
+  <script src="/static/JS/navbar.js" defer></script>
   <script src="/static/JS/user.js" defer></script>
   <script src="/static/JS/booking.js" defer></script>
   <script src="https://js.tappaysdk.com/sdk/tpdirect/v5.14.0" defer></script>
@@ -14,20 +17,8 @@
 </head>
 
 <body>
-  <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
-    <div class="container">
-      <div class="navbar__logo"><a href="/">台北一日遊</a></div>
-      <ul class="navbar__list">
-        <li class="navbar__items">
-          <a href="/booking" class="navbar__link" data-booking>預定行程</a>
-        </li>
-        <li class="navbar__items navbar_login-states">
-          <a href="#" class="navbar__link" data-dialog-trigger="true">登入/註冊</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <!-- Navbar 的佔位符 -->
+  <div id="navbar-placeholder"></div>
 
   <div class="booking__warp">
 
@@ -64,7 +55,10 @@
         </div>
         <div class="contact__field booking__form__field">
           <label for="phone" class="booking__input-label">手機號碼：</label>
-          <input type="tel" name="phone" id="phone" required>
+          <input type="tel" pattern="^09\d{8}$" name="phone" id="phone" required
+            oninvalid="this.setCustomValidity('請輸入正確的台灣手機格式（例如：0912345678）')"
+            oninput="this.setCustomValidity('')"
+          >
         </div>
       </form>
       <p class="contact__memo">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</p>
@@ -98,7 +92,9 @@
 
   </div>
 
-
+  <div id="loading-mask" class="loading-mask hidden">
+    <div class="loader"></div>
+  </div>
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="footer__copy-right">COPYRIGHT © 2025 台北一日遊</div>

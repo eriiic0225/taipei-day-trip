@@ -2,177 +2,60 @@
 from fastapi import APIRouter, Query, Depends
 from fastapi.responses import JSONResponse
 from typing import Optional
-import json
-from database.connection import get_db # 記得從連線那邊引入連線的函式
-from services.attraction_services import get_attraction_from_db
+from database.connection import get_db
+from services.attraction_services import (
+    get_attraction_from_db, 
+    search_attractions, 
+    get_categories_from_db, 
+    get_mrts_from_db
+)
 
-router = APIRouter(prefix="/api", tags=["attractions"])
-# prefix代表所有這邊的路由前面都會自動加上"/api"
-# tag就只是一個幫助辨識的標籤，沒有實質作用
+router = APIRouter(prefix="/api", tags=["Attractions"])
 
-@router.get("/attractions")
-async def search_attractions(
+
+@router.get("/attractions", summary="取得景點資料列表")
+async def api_search_attractions(
 	page:int = Query(0,ge=0),
 	category: Optional[str] = Query(None), 
 	keyword: Optional[str] = Query(None),
 	cnx=Depends(get_db)
 ):
-	page_size = 8
-	cursor = cnx.cursor(dictionary=True)
-    
+	"""根據條件查詢景點資料，支援分頁、分類和關鍵字搜尋。"""
 	try:
-		offset = page * page_size
-
-		# 動態構造 WHERE 條件
-		conditions = []
-		params = []
-        
-		if category:
-			conditions.append("a.category=%s")
-			params.append(category)
-
-		if keyword:
-			conditions.append("(a.mrt=%s OR a.name REGEXP %s)")
-			params.extend([keyword, keyword])
-
-		# 動態構造出條件
-		where_clause = " AND ".join(conditions) if conditions else "1=1"
-
-		sql = f"""
-		SELECT 
-			a.id,
-			a.name,
-			a.category,
-			a.description,
-			a.address,
-			a.transport,
-			a.mrt,
-			a.lat,
-			a.lng,
-			GROUP_CONCAT(ai.image_url) AS images
-		FROM attractions a 
-		LEFT JOIN attractions_images ai
-		ON a.id = ai.attraction_id
-		WHERE {where_clause}
-		GROUP BY a.id
-		LIMIT 8 OFFSET {offset}"""
-
-		cursor.execute(sql, tuple(params))
-		result = cursor.fetchall()
-
-		for row in result:
-			image_str = row.get("images",'')
-			row['images'] = image_str.split(',') if image_str else []
-
-
-		# 確認是否有下一頁
-		check_next_page = f"""SELECT * FROM attractions a
-		WHERE {where_clause}
-		LIMIT 1 OFFSET {(page+1)* page_size}"""
-
-		cursor.execute(check_next_page, tuple(params))
-		has_next_page = len(cursor.fetchall()) > 0
-		nextPage = (page + 1) if has_next_page else None
-
-		context = {
-			"nextPage": nextPage,
-			"data": result,	
-		}
-
-		return context
-
+		# 注意：page_size 在此寫死為8，若未來有需求可改為參數
+		attractions_data = search_attractions(page, 8, keyword, category, cnx)
+		return attractions_data
 	except Exception as e:
-		print(f"❌ 執行失敗: {str(e)}")
-		return JSONResponse(
-			status_code=500,
-			content={
-				"error": True,
-				"message": f" /api/attractions 伺服器內部錯誤:{str(e)}"
-			}
-		)
-    
-	finally:
-		cursor.close()
+		return JSONResponse(status_code=500, content={"error": True, "message": f"伺服器錯誤: {str(e)}"})
 
-@router.get("/attraction/{attractionsId}")
-async def attractions_by_id(attractionsId:int, cnx=Depends(get_db)):
-	cursor = cnx.cursor(dictionary=True) #抓資訊
+
+@router.get("/attraction/{attractionId}", summary="根據ID取得特定景點資料")
+async def api_get_attraction_by_id(attractionId:int, cnx=Depends(get_db)):
 	try:
-		attraction = get_attraction_from_db(attractionsId, cursor)
-
+		attraction = get_attraction_from_db(attractionId, cnx)
 		if not attraction:
 			return JSONResponse(
 				status_code=400,
-				content={
-					"error": True,
-					"message": "景點編號查無資料"
-				}
+				content={"error": True, "message": "景點編號不正確，查無資料"}
 			)
-
 		return {"data": attraction}
-
 	except Exception as e:
-		print(f"❌ 執行失敗: {str(e)}")
-		return JSONResponse(
-			status_code=500,
-			content={
-				"error": True,
-				"message": f"伺服器內部錯誤:{str(e)}"
-			}
-		)
-	
-	finally:
-		cursor.close()
+		return JSONResponse(status_code=500, content={"error": True, "message": f"伺服器錯誤: {str(e)}"})
 
-@router.get("/categories")
-async def list_categories(cnx=Depends(get_db)):
-	cursor = cnx.cursor()
+
+@router.get("/categories", summary="取得所有景點分類")
+async def api_list_categories(cnx=Depends(get_db)):
 	try :
-		cursor.execute(
-			"""SELECT DISTINCT category 
-			FROM attractions 
-			ORDER BY category DESC""")
-		result = cursor.fetchall()
-		categories = [category[0] for category in result]
-
+		categories = get_categories_from_db(cnx)
 		return {"data": categories}
-
 	except Exception as e:
-		print(f"❌ 執行失敗: {str(e)}")
-		return JSONResponse(
-			status_code=500,
-			content={
-				"error": True,
-				"message": f"伺服器內部錯誤:{str(e)}"
-			}
-		)
+		return JSONResponse(status_code=500, content={"error": True, "message": f"伺服器錯誤: {str(e)}"})
 
-	finally:
-		cursor.close()
 
-@router.get("/mrts")
-async def list_mrts(cnx=Depends(get_db)):
-	cursor = cnx.cursor()
+@router.get("/mrts", summary="取得所有捷運站名稱")
+async def api_list_mrts(cnx=Depends(get_db)):
 	try :
-		cursor.execute(
-			"""SELECT mrt, COUNT(*)AS num 
-			FROM attractions 
-			WHERE mrt IS NOT NULL AND mrt !=''
-			GROUP BY mrt ORDER BY num DESC;""")
-			# SQL中判斷 NULL 需要要用 IS NULL 或 IS NOT NULL
-		result = cursor.fetchall()
-		mrts = [mrt[0] for mrt in result]
+		mrts =  get_mrts_from_db(cnx)
 		return {"data": mrts}
-
 	except Exception as e:
-		print(f"❌ 執行失敗: {str(e)}")
-		return JSONResponse(
-			status_code=500,
-			content={
-				"error": True,
-				"message": f"伺服器內部錯誤:{str(e)}"
-			}
-		)
-
-	finally:
-		cursor.close()
+		return JSONResponse(status_code=500, content={"error": True, "message": f"伺服器錯誤: {str(e)}"})

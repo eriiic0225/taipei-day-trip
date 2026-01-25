@@ -142,3 +142,7 @@ cython_debug/
 
 #env
 .env
+
+# for AI agent
+PROMPT.md
+Guide - Part 7.pdf

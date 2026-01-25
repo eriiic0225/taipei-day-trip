@@ -18,32 +18,50 @@ async function loadAuthDialog() {
     }
 }
 
-// ============ Pop Up Dialog 開關監聽 ============
-document.addEventListener("click", (e)=>{
-    // 打開 Dialog(預設Login)
-    if (e.target.matches("[data-dialog-trigger]")){
-        e.preventDefault()
-        dialogs.login.showModal()
-    }
+function initGlobalEventListeners(){
+    // ============ Pop Up Dialog 開關監聽 ============
+    document.addEventListener("click", (e)=>{
+        // 打開 Dialog(預設Login)
+        if (e.target.matches("[data-dialog-trigger]")){
+            e.preventDefault()
+            dialogs.login.showModal()
+        }
+    
+        // 登入/註冊切換
+        if (e.target.matches(".dialog__switch")){
+            e.preventDefault()
+    
+            const currentDialog = e.target.closest(".dialog")
+            const targetDialog = 
+                currentDialog.classList.contains("login-dialog")?
+                dialogs.signup : dialogs.login
+    
+            currentDialog.close()
+            targetDialog.showModal()
+        }
+    
+        // 按 ❌ 關閉 dialog
+        if (e.target.closest(".dialog__close-btn")){
+            e.target.closest(".dialog").close()
+        }
+    })
 
-    // 登入/註冊切換
-    if (e.target.matches(".dialog__switch")){
-        e.preventDefault()
+    // ==== 監聽登入＆註冊的form提交 ====
+    document.addEventListener("submit", async(e)=>{
+        if (e.target.matches(".dialog__form")){
+            e.preventDefault()
+            let form = e.target
+            const formType = form.dataset.form
 
-        const currentDialog = e.target.closest(".dialog")
-        const targetDialog = 
-            currentDialog.classList.contains("login-dialog")?
-            dialogs.signup : dialogs.login
+            if (formType === "login"){
+                await login(form)
+            } else if (formType === "signup"){
+                await signUp(form)
+            }
+        }
+    })
+}
 
-        currentDialog.close()
-        targetDialog.showModal()
-    }
-
-    // 按 ❌ 關閉 dialog
-    if (e.target.closest(".dialog__close-btn")){
-        e.target.closest(".dialog").close()
-    }
-})
 
 // ==== 顯示錯誤訊息(給登入/註冊使用) ====
 function showMessage(form, message, isError = false){
@@ -134,21 +152,6 @@ async function signUp(form) {
     }
 }
 
-// ==== 監聽登入＆註冊的form提交 ====
-document.addEventListener("submit", async(e)=>{
-    if (e.target.matches(".dialog__form")){
-        e.preventDefault()
-        let form = e.target
-        const formType = form.dataset.form
-
-        if (formType === "login"){
-            await login(form)
-        } else if (formType === "signup"){
-            await signUp(form)
-        }
-    }
-})
-
 
 // ==== 登出 ====
 function logout(){
@@ -191,12 +194,33 @@ async function checkUserStates(){
 
 // ==== 確認所有頁面右上角的登入/登出的顯示狀態 ====
 async function RenderLoginStatus(){
-    const user = await checkUserStates() 
+    const user = await checkUserStates(); 
+    // 取得新的狀態區塊元素
+    const loggedOutNav = document.querySelector('[data-nav-status="logged-out"]');
+    const loggedInNav = document.querySelector('[data-nav-status="logged-in"]');
+    
+    // 取得已登入狀態下的使用者名稱和頭像顯示元素
+    const userNameDisplay = loggedInNav ? loggedInNav.querySelector('.user-profile-button__name') : null;
+    const userAvatarDisplay = loggedInNav ? loggedInNav.querySelector('.user-profile-button__avatar') : null;
+
     if (user){
-        //如果登入成功 => 渲染 - 從「登入註冊」改「登出系統」
-        const loginStates = document.querySelector(".navbar_login-states")
-        loginStates.innerHTML = 
-            `<a href="#" class="navbar__link" onclick="logout()">登出系統</a>`
+        // 如果登入成功：隱藏「未登入」狀態，顯示「已登入」狀態
+        if (loggedOutNav) loggedOutNav.style.display = 'none';
+        if (loggedInNav) {
+            loggedInNav.style.display = 'flex'; // 使用 flex 保持排版，如果你在 CSS 中設定了 flex
+            // 填充使用者名稱
+            if (userNameDisplay) userNameDisplay.textContent = user.name;
+            // 填充使用者頭像 (如果 user.avatar 為空，則使用預設圖片)
+            if (userAvatarDisplay) userAvatarDisplay.src = user.avatar || defaultAvatar;
+            // 這裡不需要額外處理 popover 的顯示/隱藏，它會由點擊按鈕自動觸發
+        }
+    } else {
+        // 如果未登入：顯示「未登入」狀態，隱藏「已登入」狀態
+        if (loggedOutNav) loggedOutNav.style.display = 'flex';
+        if (loggedInNav) loggedInNav.style.display = 'none';
+        // 同時確保 popover 選單如果打開了也關閉
+        const userMenuPopover = document.getElementById('user-menu-popover');
+        if (userMenuPopover && userMenuPopover.open) userMenuPopover.hidePopover(); // hidePopover 是 popover API 的方法
     }
 }
 
@@ -205,9 +229,13 @@ async function initUserFeatures() {
     await loadAuthDialog()
     await RenderLoginStatus()
     BookingPageRedirctCheck() // week 5 
+    // 【新增】在所有元件都載入完成後，才啟動全域事件監聽(不然會報錯)
+    initGlobalEventListeners() 
 }
 
-document.addEventListener("DOMContentLoaded", initUserFeatures);
+// 監聽 navbar 是否已經就緒
+// navbar.js 會在 navbar 載入後拋出 navbarLoaded 的事件
+document.addEventListener("navbarLoaded", initUserFeatures);
 
 //! week 5 - booking跳轉邏輯函式包裝
 function BookingPageRedirctCheck(){

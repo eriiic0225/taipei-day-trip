@@ -6,25 +6,15 @@
   <title>台北一日遊</title>
   <link rel="stylesheet" href="/static/css/reset.css">
   <link rel="stylesheet" href="/static/css/booking.css">
-  <script src="/static/JS/utils.js" async></script>
+  <link rel="stylesheet" href="/static/css/dialog.css">
+  <link rel="stylesheet" href="/static/css/navbar.css">
+  <script src="/static/JS/utils.js" defer></script>
+  <script src="/static/JS/navbar.js" defer></script>
   <script src="/static/JS/user.js" defer></script>
   <script src="/static/JS/thankyou.js" defer></script>
 </head>
 <body>
-  <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
-    <div class="container">
-      <div class="navbar__logo"><a href="/">台北一日遊</a></div>
-      <ul class="navbar__list">
-        <li class="navbar__items">
-          <a href="/booking" class="navbar__link" data-booking>預定行程</a>
-        </li>
-        <li class="navbar__items navbar_login-states">
-          <a href="#" class="navbar__link" data-dialog-trigger="true">登入/註冊</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <div id="navbar-placeholder"></div>
 
   <div class="booking__warp">
     <h2 class="order__headline">Hi <span class="order__user-name">User</span>，付款成功！</h2>
@@ -47,6 +37,9 @@
     </div>
   </div>
 
+  <div id="loading-mask" class="loading-mask hidden">
+    <div class="loader"></div>
+  </div>
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="footer__copy-right">COPYRIGHT © 2025 台北一日遊</div>

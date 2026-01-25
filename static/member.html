@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>會員中心 - 台北一日遊</title>
+  <!-- 引入所有共用及頁面專屬的 CSS -->
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/navbar.css">
+  <link rel="stylesheet" href="/static/css/dialog.css">
+  <link rel="stylesheet" href="/static/css/member.css"> <!-- 會員頁面專屬的 CSS -->
+  <!-- 引入所有共用的 JS 及頁面專屬的 JS -->
+  <script src="/static/JS/utils.js" defer></script>
+  <script src="/static/JS/navbar.js" defer></script>
+  <script src="/static/JS/user.js" defer></script>
+  <script src="/static/JS/member.js" defer></script> <!-- 會員頁面專屬的 JS -->
+</head>
+<body>
+  <!-- Navbar 的佔位符 -->
+  <div id="navbar-placeholder"></div>
+
+  <div class="content-wrapper">
+    <!-- 主要內容區 (會員中心) -->
+    <main class="member-page-container">
+      <h1 class="member-page-title">會員中心</h1>
+      <!-- 使用者資料區塊 -->
+      <section class="profile-section">
+        <h2 class="section-title">資料修改</h2>
+
+        <div class="profile-info-grid">
+
+          <div class="profile-avatar-container">
+            <div class="avatar-wrapper">
+              <img id="profile-avatar" src="#" alt="會員頭像" class="profile-avatar">
+            </div> 
+            <!-- 隱藏的 file input -->
+            <input type="file" id="avatar-file-input" accept="image/*" hidden>
+            <!-- 我們自己的按鈕 -->
+            <button type="button" class="avatar-edit-button">更換頭像</button>
+          </div>
+          <!-- 將原本的 details div 改為 form -->
+          <form id="profile-form" class="profile-form">
+            <div class="form-field">
+              <label for="profile-form-name">使用者名稱：</label>
+              <input type="text" id="profile-form-name" name="name" required>
+            </div>
+
+            <div class="form-field">
+              <label for="profile-form-email">電子信箱：</label>
+              <input type="email" id="profile-form-email" name="email" disabled><!-- 'disabled' 讓此欄位無法被修改 -->
+            </div>
+
+            <hr class="form-divider"><!-- 分隔線 -->
+
+            <div class="form-field">
+              <label for="profile-form-password-current">目前密碼：</label>
+              <input type="password" id="profile-form-password-current" name="password_current" placeholder="請輸入目前密碼">
+            </div>
+
+            <div class="form-field">
+              <label for="profile-form-password-new">新密碼：</label>
+              <input type="password" id="profile-form-password-new" name="password_new" placeholder="輸入新密碼">
+            </div>
+
+            <button type="submit" class="profile-submit-btn">儲存變更</button>
+            <p id="profile-form-message" class="form-message"></p><!-- 用於顯示成功或失敗訊息 -->
+          </form>
+        </div>
+      </section>
+      <div class="separator"></div>
+
+      <!-- 歷史訂單區塊 -->
+      <section class="orders-section">
+        <h2 class="section-title">歷史訂單紀錄</h2>
+        <div id="order-history-list" class="order-history-container">
+          <!-- 這裡的內容將由 JavaScript 動態載入 -->
+          <p>正在查詢您的歷史訂單...</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 共用的 Footer -->
+  <footer class="footer">
+    <div class="footer__copy-right">COPYRIGHT © 2025 台北一日遊</div>
+  </footer>
+</body>
+</html>

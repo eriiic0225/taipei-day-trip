@@ -5,11 +5,13 @@ from starlette.middleware.sessions import SessionMiddleware # 使用者狀態管
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
-
-# 引入搬移出去的代碼
 from database.connection import lifespan
 from api import attractions, user, order
 from api import booking as booking_api # 改名引入，避開下方的 def booking(不然會報錯)
+# Pydantic 自動報錯驗證的攔截器
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+
 #------------------- 取得環境變數內的敏感資料 --------------------
 load_dotenv()
 session_key = os.getenv("SECRET_KEY") # session金鑰
@@ -37,6 +39,24 @@ app.add_middleware(
     allow_headers=["*"],  # 允許所有標頭
 )
 
+#---------- 攔截 Pydantic 驗證錯誤 ----------
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    # exc.errors() 包含了所有出錯的欄位和原因
+	# exc.errors() 是一個 list，抓出第一個錯誤的訊息 (msg)
+	errors = exc.errors()
+	error_msg = errors[0].get("msg") if errors else "輸入格式不正確"
+	
+	print(f"參數驗證失敗: {errors}")
+
+	return JSONResponse(
+        status_code=400, # 把原本的 422 統一改成 400
+        content={
+            "error": True,
+            "message": f"無效的輸入：{error_msg}"
+        },
+    )
+
 # Static Pages (Never Modify Code in this Block)
 @app.get("/", include_in_schema=False)
 async def index(request: Request):
@@ -50,6 +70,10 @@ async def booking(request: Request):
 @app.get("/thankyou", include_in_schema=False)
 async def thankyou(request: Request):
 	return FileResponse("./static/thankyou.html", media_type="text/html")
+# 新增：會員頁面
+@app.get("/member", include_in_schema=False)
+async def thankyou(request: Request):
+	return FileResponse("./static/member.html", media_type="text/html")
 
 
 # 包含路由器
