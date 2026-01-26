@@ -5,12 +5,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = '/';
         return; // 中斷後續程式碼執行
     }
-
+    showLoading()
+    
     // 2. 填充使用者資料
     populateProfileData(user);
 
     // 3. 預留載入歷史訂單的功能
     fetchAndDisplayOrders();
+    hideLoading()
 
     initAvatarEventlistener();
     updateUserEventlistener();
