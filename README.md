@@ -73,6 +73,7 @@ Taipei Day Trip is an e-commerce website designed for tourism in Taipei City. Th
 - **Nginx**
 
 ## 🏗 Architecture
+
 ![Backend Structure](public/backend-structure.png)
 
 The backend architecture is structured based on Separation of Concerns:
@@ -88,6 +89,7 @@ The backend architecture is structured based on Separation of Concerns:
 ```
 
 ## 🗄 Database Schema
+
 ![Database Structure](public/DB_structure.png)
 
 The database structure adopts Third Normal Form (3NF) and Data Snapshot design based on business logic requirements:
@@ -100,4 +102,11 @@ The database structure adopts Third Normal Form (3NF) and Data Snapshot design b
 
 ## 📖 API Doc
 
-The backend is designed with a RESTful API architecture. Thanks to the automatically generated OpenAPI specifications by FastAPI, you can visit the Swagger UI at the `/docs` route (e.g., [http://13.237.226.245/docs](http://13.237.226.245/docs)) after starting the project to view the complete API specifications and perform testing.
+The backend is designed with a RESTful API architecture. Thanks to the automatically generated OpenAPI specifications by FastAPI, you can visit the Swagger UI at the local `/docs` route (e.g., http://localhost:8000/docs) or visit the [Live API Documentation](http://13.237.226.245/docs) to view the complete API specifications and perform testing.
+
+## 📫 Contact
+
+Eric Fan
+
+Email: fyh0225@gmail.com
+LinkedIn: https://www.linkedin.com/in/yuan-hung-fan-6b06b3275/
