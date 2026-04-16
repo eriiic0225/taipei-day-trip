@@ -1,6 +1,6 @@
 import httpx
 from datetime import datetime
-from models.order import Order, CreateOrderData
+from models.order import Order, CreateOrderData, OrderHistory
 from core.config import PARTNER_KEY
 
 
@@ -103,6 +103,25 @@ def get_order_record_from_db(orderNumber, cnx):
     
     except Exception as e:
         print(f"查詢訂單出錯: {e}")
+        return None
+
+    finally:
+        if cursor:
+            cursor.close()
+
+def get_user_orders(user_id, cnx):
+    cursor = None
+    try:
+        cursor = cnx.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM order_record WHERE user_id=%s AND status=1 ORDER BY updated_at DESC", (user_id,))
+
+        results = cursor.fetchall()
+        order_list = [Order.actualizer(row) for row in results]
+        
+        return OrderHistory(data=order_list)
+    
+    except Exception as e:
+        print(f"查詢歷史訂單出錯: {e}")
         return None
 
     finally:

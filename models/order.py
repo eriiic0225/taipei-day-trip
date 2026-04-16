@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
-from typing import Literal
+from typing import Literal, Optional
 from models.booking import BookingAttraction
 
 class OrderInput(BaseModel):
@@ -64,9 +64,9 @@ class Order(BaseModel):
 
 
 class Contact(BaseModel):
-    name: str
+    name: str = Field(..., min_length=1)
     email: EmailStr
-    phone: str
+    phone: str = Field(..., min_length=1, strip_whitespace=True)
 
 class OrderResult(BaseModel):
     number: str # 20210425121135(訂單編號)
@@ -75,3 +75,6 @@ class OrderResult(BaseModel):
 class PaymentStatus(BaseModel):
     status: Literal[0, 1] 
     message: str
+
+class OrderHistory(BaseModel):
+    data: list[Order] = []

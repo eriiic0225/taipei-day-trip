@@ -136,6 +136,75 @@ body {
     gap: 20px;
 }
 
+/* ===== History Order Card Styles ===== */
+.order-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #fff;
+    display: flex; /* 啟用 Flexbox 兩欄佈局 */
+    gap: 20px; /* 圖片和文字之間的間距 */
+    align-items: flex-start; /* 讓圖片和文字內容從頂部對齊 */
+    transition: box-shadow 0.2s ease;
+}
+
+.order-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.order-card__image {
+    flex-shrink: 0; /* 防止圖片在空間不足時被壓縮 */
+    width: auto; /* 允許寬度根據內容調整，或設定最大寬度 */
+    height: 150px; /* 固定圖片高度為 150px */
+    max-width: 180px; /* 增加一個最大寬度，避免圖片過寬 */
+}
+
+.order-card__image img {
+    width: 100%; /* 圖片填滿其容器的寬度 */
+    height: 100%; /* 圖片填滿其容器的高度 */
+    object-fit: cover; /* 確保圖片填充容器且不變形 */
+    border-radius: 4px;
+}
+
+.order-card__details {
+    flex-grow: 1; /* 讓文字區塊佔據剩餘的所有空間 */
+    font-size: 14px;
+}
+
+.order-card__number {
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    color: var(--primary);
+}
+
+.order-card__info p {
+    line-height: 1.5;
+}
+
+
+/* ===== 響應式設計 (RWD) for Order Cards ===== */
+@media (max-width: 480px) {
+    .order-card {
+        flex-direction: column; /* 在小螢幕時，將排版改為垂直堆疊 (圖上文下) */
+        align-items: center; /* 讓堆疊後的內容水平置中 */
+        text-align: center; /* 讓文字內容置中 */
+    }
+
+    .order-card__image {
+        width: 100%; /* 圖片容器在單欄時佔滿寬度 */
+        height: 120px; /* 保持圖片固定高度 */
+        max-width: 250px; /* 限制圖片的最大寬度 */
+        margin-bottom: 15px; /* 在圖片下方增加一些間距 */
+    }
+
+    /* 調整文字區塊的對齊 */
+    .order-card__details {
+        text-align: center;
+    }
+}
+
 /* ===== Footer 區域 ===== */
 .footer__copy-right {
     margin-top: 40px;
