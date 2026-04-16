@@ -106,7 +106,7 @@ The backend is designed with a RESTful API architecture. Thanks to the automatic
 
 ## 📫 Contact
 
-Eric Fan
+**Eric Fan**
 
-Email: fyh0225@gmail.com
-LinkedIn: https://www.linkedin.com/in/yuan-hung-fan-6b06b3275/
+- Email: [fyh0225@gmail.com](mailto:fyh0225@gmail.com)
+- LinkedIn: [https://www.linkedin.com/in/yuan-hung-fan-6b06b3275/](https://www.linkedin.com/in/yuan-hung-fan-6b06b3275/)
