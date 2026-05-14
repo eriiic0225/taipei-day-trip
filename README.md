@@ -12,7 +12,7 @@
 ![Project Banner](/public/banner.png)
 Taipei Day Trip is an e-commerce website designed for tourism in Taipei City. The project provides features for exploring attractions, planning itineraries, booking tour times, and integrating third-party payment services for online checkout and order creation.
 
-**🌐 Live URL:** [http://13.237.226.245](http://13.237.226.245)
+**🌐 Live URL:** [https://tpedaytrip.butitsbutter.dev](https://tpedaytrip.butitsbutter.dev)
 
 **Test Account Information:**
 
@@ -102,7 +102,7 @@ The database structure adopts Third Normal Form (3NF) and Data Snapshot design b
 
 ## 📖 API Doc
 
-The backend is designed with a RESTful API architecture. Thanks to the automatically generated OpenAPI specifications by FastAPI, you can visit the Swagger UI at the local `/docs` route (e.g., http://localhost:8000/docs) or visit the [Live API Documentation](http://13.237.226.245/docs) to view the complete API specifications and perform testing.
+The backend is designed with a RESTful API architecture. Thanks to the automatically generated OpenAPI specifications by FastAPI, you can visit the Swagger UI at the local `/docs` route (e.g., http://localhost:8000/docs) or visit the [Live API Documentation](https://tpedaytrip.butitsbutter.dev/docs) to view the complete API specifications and perform testing.
 
 ## 📫 Contact
 
