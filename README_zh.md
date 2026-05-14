@@ -11,7 +11,7 @@
 
 Taipei Day Trip 台北一日遊是一個旅遊電子商務網站。專案提供景點資料瀏覽、行程規劃、導覽時間預定，並整合第三方金流處理線上結帳與訂單建立。
 
-**🌐 網站連結:** [http://13.237.226.245](http://13.237.226.245)
+**🌐 網站連結:** [https://tpedaytrip.butitsbutter.dev/](https://tpedaytrip.butitsbutter.dev/)
 
 **測試帳號資訊:**
 
@@ -101,7 +101,7 @@ Taipei Day Trip 台北一日遊是一個旅遊電子商務網站。專案提供�
 
 ## 📖 API Doc
 
-後端採用 RESTful API 設計。透過 FastAPI 自動生成的 OpenAPI 規格，專案啟動後可於 `/docs` 路由（如：http://localhost:8000/docs ）或至 [本專案線上API文件網址](http://13.237.226.245/docs) 訪問 Swagger UI，檢視完整的 API 規格並進行測試。
+後端採用 RESTful API 設計。透過 FastAPI 自動生成的 OpenAPI 規格，專案啟動後可於 `/docs` 路由（如：http://localhost:8000/docs ）或至 [本專案線上API文件網址](https://tpedaytrip.butitsbutter.dev/docs) 訪問 Swagger UI，檢視完整的 API 規格並進行測試。
 
 ## 📫 Contact
 
