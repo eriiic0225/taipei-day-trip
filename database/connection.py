@@ -8,7 +8,8 @@ import os
 
 #------------------- 取得環境變數內的敏感資料 --------------------
 load_dotenv()
-db_pwd = os.getenv("DB_PASSWORD") # 資料庫密碼
+db_pwd = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST", "localhost")
 
 # 建立全域連接池
 cnxpool = None
@@ -20,7 +21,7 @@ async def lifespan(app):
             pool_name="fastapi_pool",          # 連接池名稱（唯一標識）
             pool_size=10,                      # 初始連接池大小（預先建立 10 個連接）
             pool_reset_session=True,           # 每次取得連接時重置會話（清除上一個操作的狀態）
-            host="localhost",                  # MySQL 服務器地址
+            host=db_host,                      # MySQL 服務器地址
             user="wehelpS2",                   # 資料庫使用者名稱
             password=db_pwd,                   # 資料庫密碼
             database="taipei_attractions"      # 預設資料庫名稱

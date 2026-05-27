@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.git/
+.gitignore
+README*.md
+public/
+raw_data/
+nginx/
+docker-compose.yml
+*.pdf
+.DS_Store
+PROMPT.md
+Guide - Part 7.pdf
